@@ -1,9 +1,14 @@
+//========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
+//
+// Purpose: 
+//
+// $NoKeywords: $
+//=============================================================================
+
 // in_win.c -- windows 95 mouse and joystick code
 // 02/21/97 JCB Added extended DirectInput code to support external controllers.
 
 #include "port.h"
-#include <SDL2/SDL_mouse.h>
-#include <SDL2/SDL_gamecontroller.h>
 
 #include "hud.h"
 #include "cl_util.h"
@@ -18,13 +23,15 @@
 #include "view.h"
 #include "Exports.h"
 
+#include <SDL2/SDL_mouse.h>
+#include <SDL2/SDL_gamecontroller.h>
+
 #define MOUSE_BUTTON_COUNT 5
 
 // Set this to 1 to show mouse cursor.  Experimental
 int	g_iVisibleMouse = 0;
 
 extern cl_enginefunc_t gEngfuncs;
-
 extern int iMouseInUse;
 
 extern kbutton_t	in_strafe;
@@ -47,6 +54,12 @@ extern cvar_t *cl_forwardspeed;
 extern cvar_t *cl_pitchspeed;
 extern cvar_t *cl_movespeedkey;
 
+
+static double s_flRawInputUpdateTime = 0.0f;
+static bool m_bRawInput = false;
+static bool m_bMouseThread = false;
+extern globalvars_t *gpGlobals;
+
 // mouse variables
 cvar_t		*m_filter;
 cvar_t		*sensitivity;
@@ -62,6 +75,9 @@ static cvar_t *m_customaccel_max;
 //Mouse move is raised to this power before being scaled by scale factor
 static cvar_t *m_customaccel_exponent;
 
+// if threaded mouse is enabled then the time to sleep between polls
+static cvar_t *m_mousethread_sleep;
+
 int			mouse_buttons;
 int			mouse_oldbuttonstate;
 POINT		current_pos;
@@ -70,7 +86,7 @@ float		mouse_x, mouse_y;
 
 static int	restore_spi;
 static int	originalmouseparms[3], newmouseparms[3] = {0, 0, 1};
-static int	mouseactive;
+static int	mouseactive = 0;
 int			mouseinitialized;
 static int	mouseparmsvalid;
 static int	mouseshowtoggle = 1;
@@ -97,15 +113,16 @@ enum _ControlList
 };
 
 
+
 DWORD	dwAxisMap[ JOY_MAX_AXES ];
 DWORD	dwControlMap[ JOY_MAX_AXES ];
-DWORD	pdwRawValue[ JOY_MAX_AXES ];
+int	pdwRawValue[ JOY_MAX_AXES ];
 DWORD		joy_oldbuttonstate, joy_oldpovstate;
 
 int			joy_id;
 DWORD		joy_numbuttons;
-SDL_GameController *s_pJoystick = NULL;
 
+SDL_GameController *s_pJoystick = NULL;
 
 // none of these cvars are saved over a session
 // this means that advanced controller configuration needs to be executed
@@ -134,6 +151,13 @@ cvar_t	*joy_wwhack2;
 
 int			joy_avail, joy_advancedinit, joy_haspov;
 
+#ifdef _WIN32
+DWORD	s_hMouseThreadId = 0;
+HANDLE	s_hMouseThread = 0;
+HANDLE	s_hMouseQuitEvent = 0;
+HANDLE	s_hMouseDoneQuitEvent = 0;
+#endif
+
 /*
 ===========
 Force_CenterView_f
@@ -151,6 +175,50 @@ void Force_CenterView_f (void)
 	}
 }
 
+#ifdef _WIN32
+long s_mouseDeltaX = 0;
+long s_mouseDeltaY = 0;
+POINT		old_mouse_pos;
+
+long ThreadInterlockedExchange( long *pDest, long value )
+{
+	return InterlockedExchange( pDest, value );
+}
+
+
+DWORD WINAPI MousePos_ThreadFunction( LPVOID p )
+{
+	s_hMouseDoneQuitEvent = CreateEvent( NULL, FALSE, FALSE, NULL );
+
+	while ( 1 )
+	{
+		if ( WaitForSingleObject( s_hMouseQuitEvent, (int)m_mousethread_sleep->value ) == WAIT_OBJECT_0 )
+		{
+			return 0;
+		}
+
+		if ( mouseactive )
+		{
+			POINT		mouse_pos;
+			GetCursorPos(&mouse_pos);
+
+			volatile int mx = mouse_pos.x - old_mouse_pos.x + s_mouseDeltaX;
+			volatile int my = mouse_pos.y - old_mouse_pos.y + s_mouseDeltaY;
+ 
+			ThreadInterlockedExchange( &old_mouse_pos.x, mouse_pos.x );
+			ThreadInterlockedExchange( &old_mouse_pos.y, mouse_pos.y );
+
+			ThreadInterlockedExchange( &s_mouseDeltaX, mx );
+			ThreadInterlockedExchange( &s_mouseDeltaY, my );
+		}
+	}
+
+	SetEvent( s_hMouseDoneQuitEvent );
+
+	return 0;
+}
+#endif
+
 /*
 ===========
 IN_ActivateMouse
@@ -163,10 +231,12 @@ void DLLEXPORT IN_ActivateMouse (void)
 #ifdef _WIN32
 		if (mouseparmsvalid)
 			restore_spi = SystemParametersInfo (SPI_SETMOUSE, 0, newmouseparms, 0);
+
 #endif
 		mouseactive = 1;
 	}
 }
+
 
 /*
 ===========
@@ -180,6 +250,7 @@ void DLLEXPORT IN_DeactivateMouse (void)
 #ifdef _WIN32
 		if (restore_spi)
 			SystemParametersInfo (SPI_SETMOUSE, 0, originalmouseparms, 0);
+
 #endif
 
 		mouseactive = 0;
@@ -231,6 +302,34 @@ IN_Shutdown
 void IN_Shutdown (void)
 {
 	IN_DeactivateMouse ();
+
+#ifdef _WIN32
+	if ( s_hMouseQuitEvent )
+	{
+		SetEvent( s_hMouseQuitEvent );
+		WaitForSingleObject( s_hMouseDoneQuitEvent, 100 );
+	}
+	
+	if ( s_hMouseThread )
+	{
+		TerminateThread( s_hMouseThread, 0 );
+		CloseHandle( s_hMouseThread );
+		s_hMouseThread = (HANDLE)0;
+	}
+	
+	if ( s_hMouseQuitEvent )
+	{
+		CloseHandle( s_hMouseQuitEvent );
+		s_hMouseQuitEvent = (HANDLE)0;
+	}
+	
+	
+	if ( s_hMouseDoneQuitEvent )
+	{
+		CloseHandle( s_hMouseDoneQuitEvent );
+		s_hMouseDoneQuitEvent = (HANDLE)0;
+	}
+#endif
 }
 
 /*
@@ -254,6 +353,22 @@ FIXME: Call through to engine?
 */
 void IN_ResetMouse( void )
 {
+	// no work to do in SDL
+#ifdef _WIN32
+	if ( !m_bRawInput && mouseactive && gEngfuncs.GetWindowCenterX && gEngfuncs.GetWindowCenterY )
+	{
+
+		SetCursorPos ( gEngfuncs.GetWindowCenterX(), gEngfuncs.GetWindowCenterY() );
+		ThreadInterlockedExchange( &old_mouse_pos.x, gEngfuncs.GetWindowCenterX() );
+		ThreadInterlockedExchange( &old_mouse_pos.y, gEngfuncs.GetWindowCenterY() );
+	}
+
+	if ( gpGlobals && gpGlobals->time - s_flRawInputUpdateTime > 1.0f )
+	{
+		s_flRawInputUpdateTime = gpGlobals->time;
+		m_bRawInput = CVAR_GET_FLOAT( "m_rawinput" ) != 0;
+	}
+#endif
 }
 
 /*
@@ -341,7 +456,6 @@ void IN_ScaleMouse( float *x, float *y )
 IN_MouseMove
 ===========
 */
-bool bCanMoveMouse ( void );
 void IN_MouseMove ( float frametime, usercmd_t *cmd)
 {
 	int		mx, my;
@@ -354,24 +468,59 @@ void IN_MouseMove ( float frametime, usercmd_t *cmd)
 		V_StopPitchDrift ();
 	}
 
-	// Ricochet: Don't let them move the mouse when they're in spectator mode
-	int iSpectator = !bCanMoveMouse();
-
 	//jjb - this disbles normal mouse control if the user is trying to 
 	//      move the camera, or if the mouse cursor is visible or if we're in intermission
-	if ( !iMouseInUse && !gHUD.m_iIntermission && !g_iVisibleMouse && !iSpectator )
+	if ( !iMouseInUse && !gHUD.m_iIntermission && !g_iVisibleMouse )
 	{
 		int deltaX, deltaY;
-		SDL_GetRelativeMouseState( &deltaX, &deltaY );
-		current_pos.x = deltaX;
-		current_pos.y = deltaY;	
-		mx = deltaX + mx_accum;
-		my = deltaY + my_accum;
+#ifdef _WIN32
+		if ( !m_bRawInput )
+		{
+			if ( m_bMouseThread )
+			{
+				ThreadInterlockedExchange( &current_pos.x, s_mouseDeltaX );
+				ThreadInterlockedExchange( &current_pos.y, s_mouseDeltaY );
+				ThreadInterlockedExchange( &s_mouseDeltaX, 0 );
+				ThreadInterlockedExchange( &s_mouseDeltaY, 0 );
+			}
+			else
+			{
+				GetCursorPos (&current_pos);
+			}
+		}
+		else
+#endif
+		{
+			SDL_GetRelativeMouseState( &deltaX, &deltaY );
+			current_pos.x = deltaX;
+			current_pos.y = deltaY;	
+		}
+		
+#ifdef _WIN32
+		if ( !m_bRawInput )
+		{
+			if ( m_bMouseThread )
+			{
+				mx = current_pos.x;
+				my = current_pos.y;
+			}
+			else
+			{
+				mx = current_pos.x - gEngfuncs.GetWindowCenterX() + mx_accum;
+				my = current_pos.y - gEngfuncs.GetWindowCenterY() + my_accum;
+			}
+		}
+		else
+#endif
+		{
+			mx = deltaX + mx_accum;
+			my = deltaY + my_accum;
+		}
 		
 		mx_accum = 0;
 		my_accum = 0;
 
-		if (m_filter->value)
+		if (m_filter && m_filter->value)
 		{
 			mouse_x = (mx + old_mouse_x) * 0.5;
 			mouse_y = (my + old_mouse_y) * 0.5;
@@ -448,10 +597,25 @@ void DLLEXPORT IN_Accumulate (void)
 	{
 	    if (mouseactive)
 	    {
-			int deltaX, deltaY;
-			SDL_GetRelativeMouseState( &deltaX, &deltaY );
-			mx_accum += deltaX;
-			my_accum += deltaY;	
+#ifdef _WIN32
+			if ( !m_bRawInput )
+			{
+				if ( !m_bMouseThread )
+				{
+					GetCursorPos (&current_pos);
+					
+					mx_accum += current_pos.x - gEngfuncs.GetWindowCenterX();
+					my_accum += current_pos.y - gEngfuncs.GetWindowCenterY();
+				}
+			}
+			else
+#endif
+			{
+				int deltaX, deltaY;
+				SDL_GetRelativeMouseState( &deltaX, &deltaY );
+				mx_accum += deltaX;
+				my_accum += deltaY;	
+			}
 			// force the mouse to the center, so there's room to move
 			IN_ResetMouse();
 			
@@ -485,10 +649,10 @@ void IN_StartupJoystick (void)
 	// abort startup if user requests no joystick
 	if ( gEngfuncs.CheckParm ("-nojoy", NULL ) ) 
 		return; 
-	
-	// assume no joystick
+ 
+ 	// assume no joystick
 	joy_avail = 0; 
-	
+
 	int nJoysticks = SDL_NumJoysticks();
 	if ( nJoysticks > 0 )
 	{
@@ -513,7 +677,7 @@ void IN_StartupJoystick (void)
 					joy_advancedinit = 0;
 					break;
 				}
-				
+
 			}
 		}
 	}
@@ -524,23 +688,23 @@ void IN_StartupJoystick (void)
 	
 }
 
+
 int RawValuePointer (int axis)
 {
 	switch (axis)
 	{
-	default:
-	case JOY_AXIS_X:
-		return SDL_GameControllerGetAxis( s_pJoystick, SDL_CONTROLLER_AXIS_LEFTX );
-	case JOY_AXIS_Y:
-		return SDL_GameControllerGetAxis( s_pJoystick, SDL_CONTROLLER_AXIS_LEFTY );
-	case JOY_AXIS_Z:
-		return SDL_GameControllerGetAxis( s_pJoystick, SDL_CONTROLLER_AXIS_RIGHTX );
-	case JOY_AXIS_R:
-		return SDL_GameControllerGetAxis( s_pJoystick, SDL_CONTROLLER_AXIS_RIGHTY );
+		default:
+		case JOY_AXIS_X:
+			return SDL_GameControllerGetAxis( s_pJoystick, SDL_CONTROLLER_AXIS_LEFTX );
+		case JOY_AXIS_Y:
+			return SDL_GameControllerGetAxis( s_pJoystick, SDL_CONTROLLER_AXIS_LEFTY );
+		case JOY_AXIS_Z:
+			return SDL_GameControllerGetAxis( s_pJoystick, SDL_CONTROLLER_AXIS_RIGHTX );
+		case JOY_AXIS_R:
+			return SDL_GameControllerGetAxis( s_pJoystick, SDL_CONTROLLER_AXIS_RIGHTY );
 		
 	}
 }
-
 
 /*
 ===========
@@ -601,7 +765,6 @@ void Joy_AdvancedUpdate_f (void)
 		dwAxisMap[JOY_AXIS_V] = dwTemp & 0x0000000f;
 		dwControlMap[JOY_AXIS_V] = dwTemp & JOY_RELATIVE_AXIS;
 	}
-
 }
 
 
@@ -696,7 +859,6 @@ IN_JoyMove
 */
 void IN_JoyMove ( float frametime, usercmd_t *cmd )
 {
-#ifdef _WIN32
 	float	speed, aspeed;
 	float	fAxisValue, fTemp;
 	int		i;
@@ -736,9 +898,7 @@ void IN_JoyMove ( float frametime, usercmd_t *cmd )
 	for (i = 0; i < JOY_MAX_AXES; i++)
 	{
 		// get the floating point zero-centered, potentially-inverted data for the current axis
-		fAxisValue = (float) pdwRawValue[i];
-		// move centerpoint to zero
-		fAxisValue -= 32768.0;
+		fAxisValue = (float)pdwRawValue[i];
 
 		if (joy_wwhack2->value != 0.0)
 		{
@@ -877,7 +1037,6 @@ void IN_JoyMove ( float frametime, usercmd_t *cmd )
 		viewangles[PITCH] = -cl_pitchup->value;
 
 	gEngfuncs.SetViewAngles( (float *)viewangles );
-#endif
 }
 
 /*
@@ -929,6 +1088,23 @@ void IN_Init (void)
 	m_customaccel_scale		= gEngfuncs.pfnRegisterVariable ( "m_customaccel_scale", "0.04", FCVAR_ARCHIVE );
 	m_customaccel_max		= gEngfuncs.pfnRegisterVariable ( "m_customaccel_max", "0", FCVAR_ARCHIVE );
 	m_customaccel_exponent	= gEngfuncs.pfnRegisterVariable ( "m_customaccel_exponent", "1", FCVAR_ARCHIVE );
+
+#ifdef _WIN32
+	m_bRawInput				= CVAR_GET_FLOAT( "m_rawinput" ) > 0;
+	m_bMouseThread			= gEngfuncs.CheckParm ("-mousethread", NULL ) != NULL;
+	m_mousethread_sleep			= gEngfuncs.pfnRegisterVariable ( "m_mousethread_sleep", "10", FCVAR_ARCHIVE );
+
+	if ( !m_bRawInput && m_bMouseThread && m_mousethread_sleep ) 
+	{
+		s_mouseDeltaX = s_mouseDeltaY = 0;
+		
+		s_hMouseQuitEvent = CreateEvent( NULL, FALSE, FALSE, NULL );
+		if ( s_hMouseQuitEvent )
+		{
+			s_hMouseThread = CreateThread( NULL, 0, MousePos_ThreadFunction, NULL, 0, &s_hMouseThreadId );
+		}
+	}
+#endif
 
 	gEngfuncs.pfnAddCommand ("force_centerview", Force_CenterView_f);
 	gEngfuncs.pfnAddCommand ("joyadvancedupdate", Joy_AdvancedUpdate_f);

@@ -1528,14 +1528,6 @@ static char *memfgets( byte *pMemFile, int fileSize, int &filePos, char *pBuffer
 
 	int stop = 0;
 
-	// Stop at the next newline (inclusive) or end of buffer
-	while ( i < last && !stop )
-	{
-		if ( pMemFile[i] == '\n' )
-			stop = 1;
-		i++;
-	}
-
 
 	// If we actually advanced the pointer, copy it over
 	if ( i != filePos )

@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1999, 2000 Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -12,6 +12,9 @@
 *   without written permission from Valve LLC.
 *
 ****/
+
+//Ricobot is at the bottom of the file
+
 /*
 
 ===== util.cpp ========================================================
@@ -43,7 +46,7 @@ float UTIL_WeaponTimeBase( void )
 	return 0.0;
 }
 
-static unsigned int glSeed = 0; 
+static unsigned int glSeed = 0;
 
 unsigned int seed_table[ 256 ] =
 {
@@ -65,13 +68,13 @@ unsigned int seed_table[ 256 ] =
 	25678, 18555, 13256, 23316, 22407, 16727, 991, 9236, 5373, 29402, 6117, 15241, 27715, 19291, 19888, 19847
 };
 
-unsigned int U_Random( void ) 
-{ 
-	glSeed *= 69069; 
+unsigned int U_Random( void )
+{
+	glSeed *= 69069;
 	glSeed += seed_table[ glSeed & 0xff ];
- 
-	return ( ++glSeed & 0x0fffffff ); 
-} 
+
+	return ( ++glSeed & 0x0fffffff );
+}
 
 void U_Srand( unsigned int seed )
 {
@@ -142,7 +145,7 @@ float UTIL_SharedRandomFloat( unsigned int seed, float low, float high )
 }
 
 void UTIL_ParametricRocket( entvars_t *pev, Vector vecOrigin, Vector vecAngles, edict_t *owner )
-{	
+{
 	pev->startpos = vecOrigin;
 	// Trace out line to end pos
 	TraceResult tr;
@@ -201,11 +204,11 @@ UTIL_GroupTrace::~UTIL_GroupTrace( void )
 	ENGINE_SETGROUPMASK( g_groupmask, g_groupop );
 }
 
-TYPEDESCRIPTION	gEntvarsDescription[] = 
+TYPEDESCRIPTION	gEntvarsDescription[] =
 {
 	DEFINE_ENTITY_FIELD( classname, FIELD_STRING ),
 	DEFINE_ENTITY_GLOBAL_FIELD( globalname, FIELD_STRING ),
-	
+
 	DEFINE_ENTITY_FIELD( origin, FIELD_POSITION_VECTOR ),
 	DEFINE_ENTITY_FIELD( oldorigin, FIELD_POSITION_VECTOR ),
 	DEFINE_ENTITY_FIELD( velocity, FIELD_VECTOR ),
@@ -394,14 +397,14 @@ Vector UTIL_VecToAngles( const Vector &vec )
 	VEC_TO_ANGLES(vec, rgflVecOut);
 	return Vector(rgflVecOut);
 }
-	
+
 //	float UTIL_MoveToOrigin( edict_t *pent, const Vector vecGoal, float flDist, int iMoveType )
 void UTIL_MoveToOrigin( edict_t *pent, const Vector &vecGoal, float flDist, int iMoveType )
 {
 	float rgfl[3];
 	vecGoal.CopyToArray(rgfl);
-//		return MOVE_TO_ORIGIN ( pent, rgfl, flDist, iMoveType ); 
-	MOVE_TO_ORIGIN ( pent, rgfl, flDist, iMoveType ); 
+//		return MOVE_TO_ORIGIN ( pent, rgfl, flDist, iMoveType );
+	MOVE_TO_ORIGIN ( pent, rgfl, flDist, iMoveType );
 }
 
 
@@ -420,7 +423,7 @@ int UTIL_EntitiesInBox( CBaseEntity **pList, int listMax, const Vector &mins, co
 	{
 		if ( pEdict->free )	// Not in use
 			continue;
-		
+
 		if ( flagMask && !(pEdict->v.flags & flagMask) )	// Does it meet the criteria?
 			continue;
 
@@ -464,7 +467,7 @@ int UTIL_MonstersInSphere( CBaseEntity **pList, int listMax, const Vector &cente
 	{
 		if ( pEdict->free )	// Not in use
 			continue;
-		
+
 		if ( !(pEdict->v.flags & (FL_CLIENT|FL_MONSTER)) )	// Not a client/monster ?
 			continue;
 
@@ -476,7 +479,7 @@ int UTIL_MonstersInSphere( CBaseEntity **pList, int listMax, const Vector &cente
 		if ( delta > radiusSquared )
 			continue;
 		distance = delta;
-		
+
 		// Now Y
 		delta = center.y - pEdict->v.origin.y;//(pEdict->v.absmin.y + pEdict->v.absmax.y)*0.5;
 		delta *= delta;
@@ -592,7 +595,7 @@ CBaseEntity	*UTIL_PlayerByIndex( int playerIndex )
 			pPlayer = CBaseEntity::Instance( pPlayerEdict );
 		}
 	}
-	
+
 	return pPlayer;
 }
 
@@ -699,7 +702,7 @@ void UTIL_ScreenShake( const Vector &center, float amplitude, float frequency, f
 		{
 			Vector delta = center - pPlayer->pev->origin;
 			float distance = delta.Length();
-	
+
 			// Had to get rid of this falloff - it didn't work well
 			if ( distance < radius )
 				localAmplitude = amplitude;//radius - distance;
@@ -707,9 +710,9 @@ void UTIL_ScreenShake( const Vector &center, float amplitude, float frequency, f
 		if ( localAmplitude )
 		{
 			shake.amplitude = FixedUnsigned16( localAmplitude, 1<<12 );		// 4.12 fixed
-			
+
 			MESSAGE_BEGIN( MSG_ONE, gmsgShake, NULL, pPlayer->edict() );		// use the magic #1 for "one client"
-				
+
 				WRITE_SHORT( shake.amplitude );				// shake amount
 				WRITE_SHORT( shake.duration );				// shake lasts this long
 				WRITE_SHORT( shake.frequency );				// shake noise frequency
@@ -745,7 +748,7 @@ void UTIL_ScreenFadeWrite( const ScreenFade &fade, CBaseEntity *pEntity )
 		return;
 
 	MESSAGE_BEGIN( MSG_ONE, gmsgFade, NULL, pEntity->edict() );		// use the magic #1 for "one client"
-		
+
 		WRITE_SHORT( fade.duration );		// fade lasts this long
 		WRITE_SHORT( fade.holdTime );		// fade lasts this long
 		WRITE_SHORT( fade.fadeFlags );		// fade type (in / out)
@@ -769,7 +772,7 @@ void UTIL_ScreenFadeAll( const Vector &color, float fadeTime, float fadeHold, in
 	for ( i = 1; i <= gpGlobals->maxClients; i++ )
 	{
 		CBaseEntity *pPlayer = UTIL_PlayerByIndex( i );
-	
+
 		UTIL_ScreenFadeWrite( fade, pPlayer );
 	}
 }
@@ -813,7 +816,7 @@ void UTIL_HudMessage( CBaseEntity *pEntity, const hudtextparms_t &textparms, con
 
 		if ( textparms.effect == 2 )
 			WRITE_SHORT( FixedUnsigned16( textparms.fxTime, 1<<8 ) );
-		
+
 		if ( strlen( pMessage ) < 512 )
 		{
 			WRITE_STRING( pMessage );
@@ -840,7 +843,7 @@ void UTIL_HudMessageAll( const hudtextparms_t &textparms, const char *pMessage )
 	}
 }
 
-					 
+
 extern int gmsgTextMsg, gmsgSayText;
 void UTIL_ClientPrintAll( int msg_dest, const char *msg_name, const char *param1, const char *param2, const char *param3, const char *param4 )
 {
@@ -992,13 +995,13 @@ TraceResult UTIL_GetGlobalTrace( )
 	return tr;
 }
 
-	
+
 void UTIL_SetSize( entvars_t *pev, const Vector &vecMin, const Vector &vecMax )
 {
 	SET_SIZE( ENT(pev), vecMin, vecMax );
 }
-	
-	
+
+
 float UTIL_VecToYaw( const Vector &vec )
 {
 	return VEC_TO_YAW(vec);
@@ -1024,7 +1027,7 @@ float UTIL_Approach( float target, float value, float speed )
 		value += speed;
 	else if ( delta < -speed )
 		value -= speed;
-	else 
+	else
 		value = target;
 
 	return value;
@@ -1035,7 +1038,7 @@ float UTIL_ApproachAngle( float target, float value, float speed )
 {
 	target = UTIL_AngleMod( target );
 	value = UTIL_AngleMod( target );
-	
+
 	float delta = target - value;
 
 	// Speed is assumed to be positive
@@ -1051,7 +1054,7 @@ float UTIL_ApproachAngle( float target, float value, float speed )
 		value += speed;
 	else if ( delta < -speed )
 		value -= speed;
-	else 
+	else
 		value = target;
 
 	return value;
@@ -1085,14 +1088,14 @@ char* UTIL_VarArgs( char *format, ... )
 {
 	va_list		argptr;
 	static char		string[1024];
-	
+
 	va_start (argptr, format);
 	vsprintf (string, format,argptr);
 	va_end (argptr);
 
-	return string;	
+	return string;
 }
-	
+
 Vector UTIL_GetAimVector( edict_t *pent, float flSpeed )
 {
 	Vector tmp;
@@ -1105,7 +1108,7 @@ int UTIL_IsMasterTriggered(string_t sMaster, CBaseEntity *pActivator)
 	if (sMaster)
 	{
 		edict_t *pentTarget = FIND_ENTITY_BY_TARGETNAME(NULL, STRING(sMaster));
-	
+
 		if ( !FNullEnt(pentTarget) )
 		{
 			CBaseEntity *pMaster = CBaseEntity::Instance(pentTarget);
@@ -1151,7 +1154,7 @@ void UTIL_BloodStream( const Vector &origin, const Vector &direction, int color,
 	if ( g_Language == LANGUAGE_GERMAN && color == BLOOD_COLOR_RED )
 		color = 0;
 
-	
+
 	MESSAGE_BEGIN( MSG_PVS, SVC_TEMPENTITY, origin );
 		WRITE_BYTE( TE_BLOODSTREAM );
 		WRITE_COORD( origin.x );
@@ -1163,7 +1166,7 @@ void UTIL_BloodStream( const Vector &origin, const Vector &direction, int color,
 		WRITE_BYTE( color );
 		WRITE_BYTE( V_min( amount, 255 ) );
 	MESSAGE_END();
-}				
+}
 
 void UTIL_BloodDrips( const Vector &origin, const Vector &direction, int color, int amount )
 {
@@ -1195,7 +1198,7 @@ void UTIL_BloodDrips( const Vector &origin, const Vector &direction, int color, 
 		WRITE_BYTE( color );								// color index into host_basepal
 		WRITE_BYTE( V_min( V_max( 3, amount / 10 ), 16 ) );		// size
 	MESSAGE_END();
-}				
+}
 
 Vector UTIL_RandomBloodVector( void )
 {
@@ -1246,7 +1249,7 @@ void UTIL_DecalTrace( TraceResult *pTrace, int decalNumber )
 			return;
 		entityIndex = ENTINDEX( pTrace->pHit );
 	}
-	else 
+	else
 		entityIndex = 0;
 
 	message = TE_DECAL;
@@ -1267,7 +1270,7 @@ void UTIL_DecalTrace( TraceResult *pTrace, int decalNumber )
 			index -= 256;
 		}
 	}
-	
+
 	MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
 		WRITE_BYTE( message );
 		WRITE_COORD( pTrace->vecEndPos.x );
@@ -1291,7 +1294,7 @@ if the custom can't be loaded.
 void UTIL_PlayerDecalTrace( TraceResult *pTrace, int playernum, int decalNumber, BOOL bIsCustom )
 {
 	int index;
-	
+
 	if (!bIsCustom)
 	{
 		if ( decalNumber < 0 )
@@ -1356,7 +1359,7 @@ void UTIL_Sparks( const Vector &position, edict_t * ed )
 
 		if (
 			pPlayer &&
-			( pPlayer->m_bHasDisconnected != TRUE ) && 
+			( pPlayer->m_bHasDisconnected != TRUE ) &&
 			( !ed || ( pPlayer->pev->groupinfo & VARS(ed)->groupinfo ) )
 		)
 		{
@@ -1474,7 +1477,7 @@ Vector UTIL_ClampVectorToBox( const Vector &input, const Vector &clampSize )
 		sourceVector.y += clampSize.y;
 	else
 		sourceVector.y = 0;
-	
+
 	if ( sourceVector.z > clampSize.z )
 		sourceVector.z -= clampSize.z;
 	else if ( sourceVector.z < -clampSize.z )
@@ -1557,7 +1560,7 @@ void UTIL_BubbleTrail( Vector from, Vector to, int count )
 		flHeight = flHeight + to.z - from.z;
 	}
 
-	if (count > 255) 
+	if (count > 255)
 		count = 255;
 
 	MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
@@ -1605,7 +1608,7 @@ void UTIL_PrecacheOther( const char *szClassname )
 		ALERT ( at_console, "NULL Ent in UTIL_PrecacheOther\n" );
 		return;
 	}
-	
+
 	CBaseEntity *pEntity = CBaseEntity::Instance (VARS( pent ));
 	if (pEntity)
 		pEntity->Precache( );
@@ -1620,7 +1623,7 @@ void UTIL_LogPrintf( char *fmt, ... )
 {
 	va_list			argptr;
 	static char		string[1024];
-	
+
 	va_start ( argptr, fmt );
 	vsprintf ( string, fmt, argptr );
 	va_end   ( argptr );
@@ -1665,7 +1668,7 @@ void UTIL_StripToken( const char *pKey, char *pDest )
 // CSave
 //
 // --------------------------------------------------------------
-static int gSizes[FIELD_TYPECOUNT] = 
+static int gSizes[FIELD_TYPECOUNT] =
 {
 	sizeof(float),		// FIELD_FLOAT
 	sizeof(int),		// FIELD_STRING
@@ -1822,7 +1825,7 @@ unsigned int CSaveRestoreBuffer :: HashString( const char *pszToken )
 unsigned short CSaveRestoreBuffer :: TokenHash( const char *pszToken )
 {
 	unsigned short	hash = (unsigned short)(HashString( pszToken ) % (unsigned)m_pdata->tokenCount );
-	
+
 #if _DEBUG
 	static int tokensparsed = 0;
 	tokensparsed++;
@@ -1851,8 +1854,8 @@ unsigned short CSaveRestoreBuffer :: TokenHash( const char *pszToken )
 			return index;
 		}
 	}
-		
-	// Token hash table full!!! 
+
+	// Token hash table full!!!
 	// [Consider doing overflow table(s) after the main table & limiting linear hash table search]
 	ALERT( at_error, "CSaveRestoreBuffer :: TokenHash() is COMPLETELY FULL!" );
 	return 0;
@@ -2291,7 +2294,7 @@ int CRestore::ReadField( void *pBaseData, TYPEDESCRIPTION *pFields, int fieldCou
 							int string;
 
 							string = ALLOC_STRING( (char *)pInputData );
-							
+
 							*((int *)pOutputData) = string;
 
 							if ( !FStringNull( string ) && m_precache )
@@ -2439,7 +2442,7 @@ int CRestore::ReadFields( const char *pname, void *pBaseData, TYPEDESCRIPTION *p
 		lastField = ReadField( pBaseData, pFields, fieldCount, lastField, header.size, m_pdata->pTokens[header.token], header.pData );
 		lastField++;
 	}
-	
+
 	return 1;
 }
 
@@ -2562,4 +2565,352 @@ int	CRestore::BufferCheckZString( const char *string )
 			return 1;
 	}
 	return 0;
+}
+
+/*
+Ricobot (C) Copyright 2004, Wei Mingzhi
+All rights reserved.
+
+Redistribution and use in source and binary forms with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice,
+this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+this list of conditions and the following disclaimer in the documentation
+and/or other materials provided with the distribution.
+
+3. Neither the name of this project nor the names of its contributors may be
+used to endorse or promote products derived from this software without
+specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY WEI MINGZHI "AS IS" AND ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+EVENT SHALL THE CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
+//
+// Ricobot - a bot example for Valve Software's Ricochet MOD
+//
+// util.cpp
+//
+
+#include "bot.h"
+
+int gmsgTextMsg = 0;
+int gmsgSayText = 0;
+int gmsgShowMenu = 0;
+
+Vector UTIL_VecToAngles( const Vector &vec )
+{
+   float rgflVecOut[3];
+   VEC_TO_ANGLES(vec, rgflVecOut);
+   return Vector(rgflVecOut);
+}
+
+
+// Overloaded to add IGNORE_GLASS
+void UTIL_TraceLine( const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, IGNORE_GLASS ignoreGlass, edict_t *pentIgnore, TraceResult *ptr )
+{
+   TRACE_LINE( vecStart, vecEnd, (igmon == ignore_monsters ? TRUE : FALSE) | (ignoreGlass?0x100:0), pentIgnore, ptr );
+}
+
+
+void UTIL_TraceLine( const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, edict_t *pentIgnore, TraceResult *ptr )
+{
+   TRACE_LINE( vecStart, vecEnd, (igmon == ignore_monsters ? TRUE : FALSE), pentIgnore, ptr );
+}
+
+
+void UTIL_MakeVectors( const Vector &vecAngles )
+{
+   MAKE_VECTORS( vecAngles );
+}
+
+
+edict_t *UTIL_FindEntityInSphere( edict_t *pentStart, const Vector &vecCenter, float flRadius )
+{
+   edict_t  *pentEntity;
+
+   pentEntity = FIND_ENTITY_IN_SPHERE( pentStart, vecCenter, flRadius);
+
+   if (!FNullEnt(pentEntity))
+      return pentEntity;
+
+   return NULL;
+}
+
+
+edict_t *UTIL_FindEntityByString( edict_t *pentStart, const char *szKeyword, const char *szValue )
+{
+   edict_t *pentEntity;
+
+   pentEntity = FIND_ENTITY_BY_STRING( pentStart, szKeyword, szValue );
+
+   if (!FNullEnt(pentEntity))
+      return pentEntity;
+   return NULL;
+}
+
+edict_t *UTIL_FindEntityByClassname( edict_t *pentStart, const char *szName )
+{
+   return UTIL_FindEntityByString( pentStart, "classname", szName );
+}
+
+edict_t *UTIL_FindEntityByTargetname( edict_t *pentStart, const char *szName )
+{
+   return UTIL_FindEntityByString( pentStart, "targetname", szName );
+}
+
+
+int UTIL_PointContents( const Vector &vec )
+{
+   return POINT_CONTENTS(vec);
+}
+
+
+void UTIL_SetSize( entvars_t *pev, const Vector &vecMin, const Vector &vecMax )
+{
+   SET_SIZE( ENT(pev), vecMin, vecMax );
+}
+
+
+void UTIL_SetOrigin( entvars_t *pev, const Vector &vecOrigin )
+{
+   SET_ORIGIN(ENT(pev), vecOrigin );
+}
+
+
+void ClientPrint( edict_t *pEntity, int msg_dest, const char *msg_name)
+{
+   if (gmsgTextMsg == 0)
+      gmsgTextMsg = REG_USER_MSG( "TextMsg", -1 );
+
+   pfnMessageBegin( MSG_ONE, gmsgTextMsg, NULL, pEntity );
+
+   pfnWriteByte( msg_dest );
+   pfnWriteString( msg_name );
+   pfnMessageEnd();
+}
+
+void UTIL_SayText( const char *pText, edict_t *pEdict )
+{
+   if (gmsgSayText == 0)
+      gmsgSayText = REG_USER_MSG( "SayText", -1 );
+
+   pfnMessageBegin( MSG_ONE, gmsgSayText, NULL, pEdict );
+      pfnWriteByte( ENTINDEX(pEdict) );
+      pfnWriteString( pText );
+   pfnMessageEnd();
+}
+
+
+void UTIL_HostSay( edict_t *pEntity, char *message )
+{
+   int   j;
+   char  text[128];
+   char *pc;
+   edict_t *client;
+
+   // make sure the text has content
+   for ( pc = message; pc != NULL && *pc != 0; pc++ )
+   {
+      if ( isprint( *pc ) && !isspace( *pc ) )
+      {
+         pc = NULL;   // we've found an alphanumeric character,  so text is valid
+         break;
+      }
+   }
+
+   if ( pc != NULL )
+      return;  // no character found, so say nothing
+
+   // turn on color set 2  (color on,  no sound)
+   sprintf( text, "%c%s: ", 2, STRING( pEntity->v.netname ) );
+
+   j = sizeof(text) - 2 - strlen(text);  // -2 for /n and null terminator
+   if ( (int)strlen(message) > j )
+      message[j] = 0;
+
+   strcat( text, message );
+   strcat( text, "\n" );
+
+   // loop through all players
+   // Start with the first player.
+   // This may return the world in single player if the client types something between levels or during spawn
+   // so check it, or it will infinite loop
+
+   if (gmsgSayText == 0)
+      gmsgSayText = REG_USER_MSG( "SayText", -1 );
+
+   client = NULL;
+   while ( ((client = UTIL_FindEntityByClassname( client, "player" )) != NULL) &&
+           (!FNullEnt(client)) )
+   {
+      if ( client == pEntity )  // skip sender of message
+         continue;
+
+      pfnMessageBegin( MSG_ONE, gmsgSayText, NULL, client );
+         pfnWriteByte( ENTINDEX(pEntity) );
+         pfnWriteString( text );
+      pfnMessageEnd();
+   }
+
+   // print to the sending client
+   pfnMessageBegin( MSG_ONE, gmsgSayText, NULL, pEntity );
+      pfnWriteByte( ENTINDEX(pEntity) );
+      pfnWriteString( text );
+   pfnMessageEnd();
+}
+
+
+#ifdef   DEBUG
+edict_t *DBG_EntOfVars( const entvars_t *pev )
+{
+   if (pev->pContainingEntity != NULL)
+      return pev->pContainingEntity;
+   ALERT(at_console, "entvars_t pContainingEntity is NULL, calling into engine");
+   edict_t* pent = (*g_engfuncs.pfnFindEntityByVars)((entvars_t*)pev);
+   if (pent == NULL)
+      ALERT(at_console, "DAMN!  Even the engine couldn't FindEntityByVars!");
+   ((entvars_t *)pev)->pContainingEntity = pent;
+   return pent;
+}
+#endif //DEBUG
+
+
+int UTIL_GetBotIndex(edict_t *pEdict)
+{
+   int index;
+
+   for (index=0; index < 32; index++)
+   {
+      if (bots[index].pEdict == pEdict)
+      {
+         return index;
+      }
+   }
+
+   return -1;  // return -1 if edict is not a bot
+}
+
+
+bot_t *UTIL_GetBotPointer(edict_t *pEdict)
+{
+   int index;
+
+   for (index=0; index < 32; index++)
+   {
+      if (bots[index].pEdict == pEdict)
+      {
+         break;
+      }
+   }
+
+   if (index < 32)
+      return (&bots[index]);
+
+   return NULL;  // return NULL if edict is not a bot
+}
+
+
+bool IsAlive(edict_t *pEdict)
+{
+   return (pEdict->v.deadflag == DEAD_NO && pEdict->v.health > 0 &&
+           !(pEdict->v.flags & FL_NOTARGET) && pEdict->v.takedamage != 0);
+}
+
+bool FInViewCone(Vector *pOrigin, edict_t *pEdict)
+{
+   Vector2D vec2LOS;
+   float    flDot;
+
+   UTIL_MakeVectors ( pEdict->v.angles );
+
+   vec2LOS = ( *pOrigin - pEdict->v.origin ).Make2D();
+   vec2LOS = vec2LOS.Normalize();
+
+   flDot = DotProduct (vec2LOS , gpGlobals->v_forward.Make2D() );
+
+   if ( flDot > 0.50 )  // 60 degree field of view
+      return TRUE;
+   else
+      return FALSE;
+}
+
+
+bool FVisible( const Vector &vecOrigin, edict_t *pEdict )
+{
+   TraceResult tr;
+   Vector      vecLookerOrigin;
+
+   // look through caller's eyes
+   vecLookerOrigin = pEdict->v.origin + pEdict->v.view_ofs;
+
+   int bInWater = (UTIL_PointContents (vecOrigin) == CONTENTS_WATER);
+   int bLookerInWater = (UTIL_PointContents (vecLookerOrigin) == CONTENTS_WATER);
+
+   // don't look through water
+   if (bInWater != bLookerInWater)
+      return FALSE;
+
+   UTIL_TraceLine(vecLookerOrigin, vecOrigin, ignore_monsters, ignore_glass, pEdict, &tr);
+
+   if (tr.flFraction != 1.0)
+      return FALSE;  // Line of sight is not established
+   else
+      return TRUE;  // line of sight is valid.
+}
+
+
+Vector GetGunPosition(edict_t *pEdict)
+{
+   return (pEdict->v.origin + pEdict->v.view_ofs);
+}
+
+
+Vector VecBModelOrigin(edict_t *pEdict)
+{
+   return pEdict->v.absmin + (pEdict->v.size * 0.5);
+}
+
+
+void UTIL_BuildFileName(char *filename, char *arg1, char *arg2)
+{
+   GET_GAME_DIR(filename);
+   strcat(filename, "/");
+
+   if ((arg1) && (*arg1) && (arg2) && (*arg2))
+   {
+      strcat(filename, arg1);
+      strcat(filename, "/");
+      strcat(filename, arg2);
+   }
+   else if ((arg1) && (*arg1))
+   {
+      strcat(filename, arg1);
+   }
+}
+
+void ClampAngle(float &angle)
+{
+   if (angle >= 180)
+      angle -= 360 * (int)(angle / 360 + 0.5);
+   if (angle < 180)
+      angle += 360 * (int)(-angle / 360 + 0.5);
+}
+
+void ClampAngles(Vector &angles)
+{
+   ClampAngle(angles.x);
+   ClampAngle(angles.y);
+   angles.z = 0.0;
 }

@@ -67,6 +67,7 @@ typedef enum
 	PLAYER_DIE,
 	PLAYER_ATTACK1,
 	PLAYER_FALL,
+	PLAYER_TAUNT1,
 } PLAYER_ANIM;
 
 class CDiscArena;

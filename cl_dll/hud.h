@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1999, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -12,7 +12,7 @@
 *   without written permission from Valve LLC.
 *
 ****/
-//			
+//
 //  hud.h
 //
 // class CHud declaration
@@ -26,7 +26,7 @@
 #define RGB_GREENISH 0x0000A000 //0,160,0
 
 #ifndef _WIN32
-#define _cdecl 
+#define _cdecl
 #endif
 
 #include "wrect.h"
@@ -36,7 +36,7 @@
 #define DHN_DRAWZERO 1
 #define DHN_2DIGITS  2
 #define DHN_3DIGITS  4
-#define MIN_ALPHA	 100	
+#define MIN_ALPHA	 100
 
 #define		HUDELEM_ACTIVE	1
 
@@ -68,7 +68,7 @@ class CHudBase
 public:
 	POSITION  m_pos;
 	int   m_type;
-	int	  m_iFlags; // active, moving, 
+	int	  m_iFlags; // active, moving,
 	virtual		~CHudBase() {}
 	virtual int Init( void ) {return 0;}
 	virtual int VidInit( void ) {return 0;}
@@ -179,7 +179,7 @@ public:
 	int VidInit( void );
 	int Draw(float flTime);
 	int MsgFunc_Geiger(const char *pszName, int iSize, void *pbuf);
-	
+
 private:
 	int m_iGeigerRange;
 
@@ -218,7 +218,7 @@ public:
 	int MsgFunc_StatusValue( const char *pszName, int iSize, void *pbuf );
 
 protected:
-	enum { 
+	enum {
 		MAX_STATUSTEXT_LENGTH = 128,
 		MAX_STATUSBAR_VALUES = 8,
 		MAX_STATUSBAR_LINES = 3,
@@ -234,7 +234,7 @@ protected:
 	float *m_pflNameColors[MAX_STATUSBAR_LINES];
 };
 
-struct extra_player_info_t 
+struct extra_player_info_t
 {
 	short frags;
 	short deaths;
@@ -245,7 +245,7 @@ struct extra_player_info_t
 	char teamname[MAX_TEAM_NAME];
 };
 
-struct team_info_t 
+struct team_info_t
 {
 	char name[MAX_TEAM_NAME];
 	short frags;
@@ -329,13 +329,13 @@ public:
 	int VidInit( void );
 	int Draw(float flTime);
 	int MsgFunc_Battery(const char *pszName,  int iSize, void *pbuf );
-	
+
 private:
 	HSPRITE m_hSprite1;
 	HSPRITE m_hSprite2;
 	wrect_t *m_prc1;
 	wrect_t *m_prc2;
-	int	  m_iBat;	
+	int	  m_iBat;
 	int	  m_iBatMax;
 	float m_fFade;
 	int	  m_iHeight;		// width of the battery innards
@@ -354,7 +354,7 @@ public:
 	void Reset( void );
 	int MsgFunc_Flashlight(const char *pszName,  int iSize, void *pbuf );
 	int MsgFunc_FlashBat(const char *pszName,  int iSize, void *pbuf );
-	
+
 private:
 	HSPRITE m_hSprite1;
 	HSPRITE m_hSprite2;
@@ -362,8 +362,8 @@ private:
 	wrect_t *m_prc1;
 	wrect_t *m_prc2;
 	wrect_t *m_prcBeam;
-	float m_flBat;	
-	int	  m_iBat;	
+	float m_flBat;
+	int	  m_iBat;
 	int	  m_fOn;
 	float m_fFade;
 	int	  m_iWidth;		// width of the battery innards
@@ -454,12 +454,12 @@ public:
 	int Draw(float flTime);
 	int MsgFunc_StatusIcon(const char *pszName, int iSize, void *pbuf);
 
-	enum { 
+	enum {
 		MAX_ICONSPRITENAME_LENGTH = MAX_SPRITE_NAME_LENGTH,
 		MAX_ICONSPRITES = 4,
 	};
 
-	
+
 	//had to make these public so CHud could access them (to enable concussion icon)
 	//could use a friend declaration instead...
 	void EnableIcon( const char *pszIconName, unsigned char red, unsigned char green, unsigned char blue );
@@ -548,7 +548,7 @@ private:
 	int							m_iSpriteCount;
 	int							m_iSpriteCountAllRes;
 	float						m_flMouseSensitivity;
-	int							m_iConcussionEffect; 
+	int							m_iConcussionEffect;
 
 public:
 
@@ -582,7 +582,7 @@ private:
 
 	struct cvar_s *default_fov;
 public:
-	HSPRITE GetSprite( int index ) 
+	HSPRITE GetSprite( int index )
 	{
 		return (index < 0) ? 0 : m_rghSprites[index];
 	}
@@ -592,7 +592,7 @@ public:
 		return m_rgrcRects[index];
 	}
 
-	
+
 	int GetSpriteIndex( const char *SpriteName );	// gets a sprite index, for use in the m_rghSprites[] array
 
 	CHudAmmo		m_Ammo;
@@ -618,7 +618,7 @@ public:
 	int Redraw( float flTime, int intermission );
 	int UpdateClientData( client_data_t *cdata, float time );
 
-	CHud() : m_iSpriteCount(0), m_pHudList(NULL) {}  
+	CHud() : m_iSpriteCount(0), m_pHudList(NULL) {}
 	~CHud();			// destructor, frees allocated memory
 
 	// user messages
@@ -655,4 +655,3 @@ extern int g_iTeamNumber;
 extern int g_iUser1;
 extern int g_iUser2;
 extern int g_iUser3;
-

@@ -143,7 +143,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(Configuration)\$(ProjectName)\</OutDir>
+    <OutDir>C:\Program Files (x86)\Steam\steamapps\common\Half-Life\zecachet\dlls</OutDir>
     <IntDir>$(Configuration)\$(ProjectName)\int\</IntDir>
     <TargetName>mp</TargetName>
   </PropertyGroup>

@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1999, 2000 Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -65,6 +65,8 @@ typedef enum {
 	ACT_DIE_HEADSHOT,
 	ACT_DIEFORWARD,
 	ACT_DIEBACKWARD,
+
+	ACT_TAUNT1,
 } Activity;
 
 

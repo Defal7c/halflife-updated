@@ -1,9 +1,18 @@
-// cl.input.c  -- builds an intended movement command to send to the server
-
-//xxxxxx Move bob and pitch drifting code here and other stuff from view if needed
-
-// Quake is a trademark of Id Software, Inc., (c) 1996 Id Software, Inc. All
-// rights reserved.
+/***
+*
+*	Copyright (c) 1999, 2000 Valve LLC. All rights reserved.
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
+// input.cpp  -- builds an intended movement command to send to the server
 #include "hud.h"
 #include "cl_util.h"
 #include "camera.h"
@@ -17,15 +26,25 @@ extern "C"
 #include "camera.h"
 #include "in_defs.h"
 #include "view.h"
-#include "bench.h"
 #include <string.h>
 #include <ctype.h>
-#include "Exports.h"
 
 #include "vgui_TeamFortressViewport.h"
+#include "vgui_discobjects.h"
 
+// Observer Movement modes (stored in pev->iuser1, so the physics code can get at them)
+#define OBS_CHASE_LOCKED		1
+#define OBS_CHASE_FREE			2
+#define OBS_ROAMING				3
+#define OBS_LOCKEDVIEW			4
 
-extern int g_iAlive;
+extern "C"
+{
+	struct kbutton_s DLLEXPORT *KB_Find( const char *name );
+	void DLLEXPORT CL_CreateMove ( float frametime, struct usercmd_s *cmd, int active );
+	void DLLEXPORT HUD_Shutdown( void );
+	int DLLEXPORT HUD_Key_Event( int eventcode, int keynum, const char *pszCurrentBinding );
+}
 
 extern int g_weaponselect;
 extern cl_enginefunc_t gEngfuncs;
@@ -37,7 +56,6 @@ void IN_Init (void);
 void IN_Move ( float frametime, usercmd_t *cmd);
 void IN_Shutdown( void );
 void V_Init( void );
-void VectorAngles( const float *forward, float *angles );
 int CL_ButtonBits( int );
 
 // xxx need client dll function to get and clear impuse
@@ -208,8 +226,6 @@ Allows the engine to get a kbutton_t directly ( so it can check +mlook state, et
 */
 struct kbutton_s DLLEXPORT *KB_Find( const char *name )
 {
-//	RecClFindKey(name);
-
 	kblist_t *p;
 	p = g_kbkeys;
 	while ( p )
@@ -231,11 +247,11 @@ Add a kbutton_t * to the list of pointers the engine can retrieve via KB_Find
 */
 void KB_Add( const char *name, kbutton_t *pkb )
 {
-	kblist_t *p;	
+	kblist_t *p;
 	kbutton_t *kb;
 
 	kb = KB_Find( name );
-	
+
 	if ( kb )
 		return;
 
@@ -303,7 +319,7 @@ void KeyDown (kbutton_t *b)
 
 	if (k == b->down[0] || k == b->down[1])
 		return;		// repeating key
-	
+
 	if (!b->down[0])
 		b->down[0] = k;
 	else if (!b->down[1])
@@ -313,7 +329,7 @@ void KeyDown (kbutton_t *b)
 		gEngfuncs.Con_DPrintf ("Three keys down for a button '%c' '%c' '%c'!\n", b->down[0], b->down[1], c);
 		return;
 	}
-	
+
 	if (b->state & 1)
 		return;		// still down
 	b->state |= 1 + 2;	// down + impulse down
@@ -328,7 +344,7 @@ void KeyUp (kbutton_t *b)
 {
 	int		k;
 	char	*c;
-	
+
 	c = gEngfuncs.Cmd_Argv(1);
 	if (c[0])
 		k = atoi(c);
@@ -347,7 +363,6 @@ void KeyUp (kbutton_t *b)
 		return;		// key up without coresponding down (menu pass through)
 	if (b->down[0] || b->down[1])
 	{
-		//Con_Printf ("Keys down for button: '%c' '%c' '%c' (%d,%d,%d)!\n", b->down[0], b->down[1], c, b->down[0], b->down[1], c);
 		return;		// some other key is still holding it down
 	}
 
@@ -357,7 +372,6 @@ void KeyUp (kbutton_t *b)
 	b->state &= ~1;		// now up
 	b->state |= 4; 		// impulse up
 }
-
 /*
 ============
 HUD_Key_Event
@@ -367,11 +381,9 @@ Return 1 to allow engine to process the key, otherwise, act on it as needed
 */
 int DLLEXPORT HUD_Key_Event( int down, int keynum, const char *pszCurrentBinding )
 {
-//	RecClKeyEvent(down, keynum, pszCurrentBinding);
-
 	if (gViewPort)
 		return gViewPort->KeyInput(down, keynum, pszCurrentBinding);
-	
+
 	return 1;
 }
 
@@ -390,96 +402,29 @@ void IN_LeftDown(void) {KeyDown(&in_left);}
 void IN_LeftUp(void) {KeyUp(&in_left);}
 void IN_RightDown(void) {KeyDown(&in_right);}
 void IN_RightUp(void) {KeyUp(&in_right);}
-
-void IN_ForwardDown(void)
-{
-	KeyDown(&in_forward);
-	gHUD.m_Spectator.HandleButtonsDown( IN_FORWARD );
-}
-
-void IN_ForwardUp(void)
-{
-	KeyUp(&in_forward);
-	gHUD.m_Spectator.HandleButtonsUp( IN_FORWARD );
-}
-
-void IN_BackDown(void)
-{
-	KeyDown(&in_back);
-	gHUD.m_Spectator.HandleButtonsDown( IN_BACK );
-}
-
-void IN_BackUp(void)
-{
-	KeyUp(&in_back);
-	gHUD.m_Spectator.HandleButtonsUp( IN_BACK );
-}
+void IN_ForwardDown(void) {KeyDown(&in_forward);}
+void IN_ForwardUp(void) {KeyUp(&in_forward);}
+void IN_BackDown(void) {KeyDown(&in_back);}
+void IN_BackUp(void) {KeyUp(&in_back);}
 void IN_LookupDown(void) {KeyDown(&in_lookup);}
 void IN_LookupUp(void) {KeyUp(&in_lookup);}
 void IN_LookdownDown(void) {KeyDown(&in_lookdown);}
 void IN_LookdownUp(void) {KeyUp(&in_lookdown);}
-void IN_MoveleftDown(void)
-{
-	KeyDown(&in_moveleft);
-	gHUD.m_Spectator.HandleButtonsDown( IN_MOVELEFT );
-}
-
-void IN_MoveleftUp(void)
-{
-	KeyUp(&in_moveleft);
-	gHUD.m_Spectator.HandleButtonsUp( IN_MOVELEFT );
-}
-
-void IN_MoverightDown(void)
-{
-	KeyDown(&in_moveright);
-	gHUD.m_Spectator.HandleButtonsDown( IN_MOVERIGHT );
-}
-
-void IN_MoverightUp(void)
-{
-	KeyUp(&in_moveright);
-	gHUD.m_Spectator.HandleButtonsUp( IN_MOVERIGHT );
-}
+void IN_MoveleftDown(void) {KeyDown(&in_moveleft);}
+void IN_MoveleftUp(void) {KeyUp(&in_moveleft);}
+void IN_MoverightDown(void) {KeyDown(&in_moveright);}
+void IN_MoverightUp(void) {KeyUp(&in_moveright);}
 void IN_SpeedDown(void) {KeyDown(&in_speed);}
 void IN_SpeedUp(void) {KeyUp(&in_speed);}
 void IN_StrafeDown(void) {KeyDown(&in_strafe);}
 void IN_StrafeUp(void) {KeyUp(&in_strafe);}
-
-// needs capture by hud/vgui also
-extern void __CmdFunc_InputPlayerSpecial(void);
-
-void IN_Attack2Down(void) 
-{
-	KeyDown(&in_attack2);
-
-#ifdef _TFC
-	__CmdFunc_InputPlayerSpecial();
-#endif
-
-	gHUD.m_Spectator.HandleButtonsDown( IN_ATTACK2 );
-}
-
+void IN_Attack2Down(void) {KeyDown(&in_attack2);}
 void IN_Attack2Up(void) {KeyUp(&in_attack2);}
-void IN_UseDown (void)
-{
-	KeyDown(&in_use);
-	gHUD.m_Spectator.HandleButtonsDown( IN_USE );
-}
+void IN_UseDown (void) {KeyDown(&in_use);}
 void IN_UseUp (void) {KeyUp(&in_use);}
-void IN_JumpDown (void)
-{
-	KeyDown(&in_jump);
-	gHUD.m_Spectator.HandleButtonsDown( IN_JUMP );
-
-}
+void IN_JumpDown (void) {KeyDown(&in_jump);}
 void IN_JumpUp (void) {KeyUp(&in_jump);}
-void IN_DuckDown(void)
-{
-	KeyDown(&in_duck);
-	gHUD.m_Spectator.HandleButtonsDown( IN_DUCK );
-
-}
+void IN_DuckDown(void) {KeyDown(&in_duck);}
 void IN_DuckUp(void) {KeyUp(&in_duck);}
 void IN_ReloadDown(void) {KeyDown(&in_reload);}
 void IN_ReloadUp(void) {KeyUp(&in_reload);}
@@ -491,7 +436,6 @@ void IN_GraphUp(void) {KeyUp(&in_graph);}
 void IN_AttackDown(void)
 {
 	KeyDown( &in_attack );
-	gHUD.m_Spectator.HandleButtonsDown( IN_ATTACK );
 }
 
 void IN_AttackUp(void)
@@ -552,11 +496,11 @@ float CL_KeyState (kbutton_t *key)
 {
 	float		val = 0.0;
 	int			impulsedown, impulseup, down;
-	
+
 	impulsedown = key->state & 2;
 	impulseup	= key->state & 4;
 	down		= key->state & 1;
-	
+
 	if ( impulsedown && !impulseup )
 	{
 		// pressed and held this frame?
@@ -580,20 +524,30 @@ float CL_KeyState (kbutton_t *key)
 		if ( down )
 		{
 			// released and re-pressed this frame
-			val = 0.75;	
+			val = 0.75;
 		}
 		else
 		{
 			// pressed and released this frame
-			val = 0.25;	
+			val = 0.25;
 		}
 	}
 
 	// clear impulses
-	key->state &= 1;		
+	key->state &= 1;
 	return val;
 }
 
+bool bCanMoveMouse ( void )
+{
+	if ( gViewPort && ( gViewPort->m_iUser1 == OBS_ROAMING || gViewPort->m_iUser1 == OBS_CHASE_FREE ) )
+		 return TRUE;
+
+	if ( gViewPort && gViewPort->m_iUser1 == OBS_LOCKEDVIEW )
+		 return FALSE;
+
+	return TRUE;
+}
 /*
 ================
 CL_AdjustAngles
@@ -605,7 +559,7 @@ void CL_AdjustAngles ( float frametime, float *viewangles )
 {
 	float	speed;
 	float	up, down;
-	
+
 	if (in_speed.state & 1)
 	{
 		speed = frametime * cl_anglespeedkey->value;
@@ -614,6 +568,10 @@ void CL_AdjustAngles ( float frametime, float *viewangles )
 	{
 		speed = frametime;
 	}
+
+	// Ricochet: Don't let them move the mouse when they're in spectator mode
+	if ( bCanMoveMouse() == FALSE )
+		 return;
 
 	if (!(in_strafe.state & 1))
 	{
@@ -627,16 +585,16 @@ void CL_AdjustAngles ( float frametime, float *viewangles )
 		viewangles[PITCH] -= speed*cl_pitchspeed->value * CL_KeyState (&in_forward);
 		viewangles[PITCH] += speed*cl_pitchspeed->value * CL_KeyState (&in_back);
 	}
-	
+
 	up = CL_KeyState (&in_lookup);
 	down = CL_KeyState(&in_lookdown);
-	
+
 	viewangles[PITCH] -= speed*cl_pitchspeed->value * up;
 	viewangles[PITCH] += speed*cl_pitchspeed->value * down;
 
 	if (up || down)
 		V_StopPitchDrift ();
-		
+
 	if (viewangles[PITCH] > cl_pitchdown->value)
 		viewangles[PITCH] = cl_pitchdown->value;
 	if (viewangles[PITCH] < -cl_pitchup->value)
@@ -658,14 +616,12 @@ if active == 1 then we are 1) not playing back demos ( where our commands are ig
 ================
 */
 void DLLEXPORT CL_CreateMove ( float frametime, struct usercmd_s *cmd, int active )
-{	
-//	RecClCL_CreateMove(frametime, cmd, active);
-
+{
 	float spd;
 	vec3_t viewangles;
 	static vec3_t oldangles;
 
-	if ( active && !Bench_Active() )
+	if ( active )
 	{
 		//memset( viewangles, 0, sizeof( vec3_t ) );
 		//viewangles[ 0 ] = viewangles[ 1 ] = viewangles[ 2 ] = 0.0;
@@ -674,7 +630,7 @@ void DLLEXPORT CL_CreateMove ( float frametime, struct usercmd_s *cmd, int activ
 		CL_AdjustAngles ( frametime, viewangles );
 
 		memset (cmd, 0, sizeof(*cmd));
-		
+
 		gEngfuncs.SetViewAngles( (float *)viewangles );
 
 		if ( in_strafe.state & 1 )
@@ -690,10 +646,10 @@ void DLLEXPORT CL_CreateMove ( float frametime, struct usercmd_s *cmd, int activ
 		cmd->upmove -= cl_upspeed->value * CL_KeyState (&in_down);
 
 		if ( !(in_klook.state & 1 ) )
-		{	
+		{
 			cmd->forwardmove += cl_forwardspeed->value * CL_KeyState (&in_forward);
 			cmd->forwardmove -= cl_backspeed->value * CL_KeyState (&in_back);
-		}	
+		}
 
 		// adjust for speed key
 		if ( in_speed.state & 1 )
@@ -734,7 +690,7 @@ void DLLEXPORT CL_CreateMove ( float frametime, struct usercmd_s *cmd, int activ
 	cmd->buttons = CL_ButtonBits( 1 );
 
 	// If they're in a modal dialog, ignore the attack button.
-	if(GetClientVoiceMgr()->IsInSquelchMode())
+	if( GetClientVoiceMgr()->IsInSquelchMode() )
 		cmd->buttons &= ~IN_ATTACK;
 
 	// Using joystick?
@@ -753,7 +709,7 @@ void DLLEXPORT CL_CreateMove ( float frametime, struct usercmd_s *cmd, int activ
 	gEngfuncs.GetViewAngles( (float *)viewangles );
 	// Set current view angles.
 
-	if ( g_iAlive )
+	if ( gHUD.m_Health.m_iHealth > 0 )
 	{
 		VectorCopy( viewangles, cmd->viewangles );
 		VectorCopy( viewangles, oldangles );
@@ -762,8 +718,6 @@ void DLLEXPORT CL_CreateMove ( float frametime, struct usercmd_s *cmd, int activ
 	{
 		VectorCopy( oldangles, cmd->viewangles );
 	}
-
-	Bench_SetViewAngles( 1, (float *)&cmd->viewangles, frametime, cmd );
 }
 
 /*
@@ -794,12 +748,12 @@ int CL_ButtonBits( int bResetState )
 	{
 		bits |= IN_ATTACK;
 	}
-	
+
 	if (in_duck.state & 3)
 	{
 		bits |= IN_DUCK;
 	}
- 
+
 	if (in_jump.state & 3)
 	{
 		bits |= IN_JUMP;
@@ -809,7 +763,7 @@ int CL_ButtonBits( int bResetState )
 	{
 		bits |= IN_FORWARD;
 	}
-	
+
 	if (in_back.state & 3)
 	{
 		bits |= IN_BACK;
@@ -829,17 +783,17 @@ int CL_ButtonBits( int bResetState )
 	{
 		bits |= IN_LEFT;
 	}
-	
+
 	if (in_right.state & 3)
 	{
 		bits |= IN_RIGHT;
 	}
-	
+
 	if ( in_moveleft.state & 3 )
 	{
 		bits |= IN_MOVELEFT;
 	}
-	
+
 	if (in_moveright.state & 3)
 	{
 		bits |= IN_MOVERIGHT;
@@ -1021,21 +975,14 @@ void ShutdownInput (void)
 }
 
 #include "interface.h"
-void CL_UnloadParticleMan( void );
-
-#if defined( _TFC )
-void ClearEventList( void );
-#endif
 
 void DLLEXPORT HUD_Shutdown( void )
 {
-//	RecClShutdown();
-
 	ShutdownInput();
 
-#if defined( _TFC )
-	ClearEventList();
-#endif
-	
-	CL_UnloadParticleMan();
+	extern CSysModule *g_hTrackerModule;
+	if (g_hTrackerModule)
+	{
+		Sys_UnloadModule(g_hTrackerModule);
+	}
 }

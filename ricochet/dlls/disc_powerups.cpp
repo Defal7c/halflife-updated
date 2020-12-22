@@ -16,9 +16,9 @@
 // $NoKeywords: $
 //=============================================================================
 
-#include "cbase.h"
 #include "extdll.h"
 #include "util.h"
+#include "cbase.h"
 #include "monsters.h"
 #include "weapons.h"
 #include "nodes.h"
@@ -45,8 +45,8 @@ char *szPowerupModels[NUM_POWERUPS] =
 LINK_ENTITY_TO_CLASS( item_powerup, CDiscwarPowerup );
 
 //=========================================================
+void CDiscwarPowerup::Spawn( void )
 {
-	void CDiscwarPowerup::Spawn( void )
 	Precache( );
 
 	// Don't fall down
@@ -104,23 +104,27 @@ void CDiscwarPowerup::SetObjectCollisionBox( void )
 
 void CDiscwarPowerup::PowerupTouch( CBaseEntity *pOther )
 {
-	if ( !pOther->IsPlayer() )
+	if ( !pOther->IsPlayer() ) 
 		return;
 
 	CBasePlayer *pPlayer = (CBasePlayer *)pOther;
 
+
+//	if ( pPlayer->IsSpawnProtected() || !pPlayer->IsAlive() ) // Wha? - Spawn Protection
+//		return;
+															// I dunno chief, removed it! >def
 	// Give the powerup to the player
 	pPlayer->GivePowerup( m_iPowerupType );
 	m_hPlayerIGaveTo = pPlayer;
 	SetTouch( NULL );
 	pev->effects |= EF_NODRAW;
 
-	// Choose another powerup soon
-	SetThink( &CDiscwarPowerup::ChoosePowerupThink );
+	// Choose another powerup soon 
+	SetThink( ChoosePowerupThink );
 	pev->nextthink = gpGlobals->time + DISC_POWERUP_RESPAWN_TIME;
 
 	// Play the powerup sound
-	EMIT_SOUND_DYN( pOther->edict(), CHAN_STATIC, "powerup.wav", 1.0, ATTN_NORM, 0, 98 + RANDOM_LONG(0,3));
+	EMIT_SOUND_DYN( pOther->edict(), CHAN_STATIC, "powerup.wav", 1.0, ATTN_NORM, 0, 98 + RANDOM_LONG(0,3)); 
 }
 
 // Disappear and don't appear again until enabled
@@ -135,8 +139,8 @@ void CDiscwarPowerup::Disable()
 // Come back and pick a new powerup
 void CDiscwarPowerup::Enable()
 {
-	// Pick a powerup
-	SetThink( &CDiscwarPowerup::ChoosePowerupThink );
+	// Pick a powerup 
+	SetThink( ChoosePowerupThink );
 	pev->nextthink = gpGlobals->time + (DISC_POWERUP_RESPAWN_TIME / 2);
 }
 
@@ -150,21 +154,21 @@ void CDiscwarPowerup::ChoosePowerupThink( void )
 	SET_MODEL( ENT(pev), szPowerupModels[iPowerup] );
 	pev->effects &= ~EF_NODRAW;
 
-	SetTouch(&CDiscwarPowerup::PowerupTouch);
-
+	SetTouch(PowerupTouch);
+	
 	// Start Animating
 	pev->sequence = 0;
 	pev->frame = 0;
 	ResetSequenceInfo();
 
-	SetThink(&CDiscwarPowerup::AnimateThink);
+	SetThink(AnimateThink);
 	pev->nextthink = gpGlobals->time + 0.1;
 
 	pev->rendermode = kRenderTransAdd;
 	pev->renderamt = 150;
 
 	// Play the powerup appear sound
-	EMIT_SOUND_DYN( edict(), CHAN_STATIC, "pspawn.wav", 1.0, ATTN_NORM, 0, 98 + RANDOM_LONG(0,3));
+	EMIT_SOUND_DYN( edict(), CHAN_STATIC, "pspawn.wav", 1.0, ATTN_NORM, 0, 98 + RANDOM_LONG(0,3)); 
 }
 
 void CDiscwarPowerup::AnimateThink( void )
@@ -182,7 +186,7 @@ void CDiscwarPowerup::RemovePowerupThink( void )
 	((CBasePlayer*)(CBaseEntity*)m_hPlayerIGaveTo)->RemovePowerup( m_iPowerupType );
 
 	// Pick a powerup later
-	SetThink( &CDiscwarPowerup::ChoosePowerupThink );
+	SetThink( ChoosePowerupThink );
 	pev->nextthink = gpGlobals->time + DISC_POWERUP_RESPAWN_TIME;
 }
 
@@ -201,16 +205,6 @@ void CBasePlayer::GivePowerup( int iPowerupType )
 	MESSAGE_END();
 
 	m_iPowerupDiscs = MAX_DISCS;
-}
-
-//Spawn player's powerups if they die
-void CBasePlayer::SpawnPowerupAfterDeath( int m_iPowerups )
-{
-	if( !IsAlive() )
-	{
-		Activate();
-		RemovePowerupThink();
-	}
 }
 
 void CBasePlayer::RemovePowerup( int iPowerupType )
@@ -241,3 +235,4 @@ bool CBasePlayer::HasPowerup( int iPowerupType )
 {
 	return (m_iPowerups & iPowerupType) != 0;
 }
+

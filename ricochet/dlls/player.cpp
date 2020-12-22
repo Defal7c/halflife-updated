@@ -4898,8 +4898,9 @@ void CBasePlayer::ClearFreezeAndRender()
 // This should eventually be moved into the engine.
 void CBasePlayer::ClientHearVox( const char *pSentence )
 {
-	MESSAGE_BEGIN( MSG_ONE, SVC_STUFFTEXT, NULL, pev );
-
+	//MESSAGE_BEGIN( MSG_ONE, SVC_STUFFTEXT, NULL, pev );
+	MESSAGE_BEGIN( MSG_ONE, SVC_TEMPENTITY, NULL, pev );
+	
 	// If it's a sentence, don't put quotes around it
 	if (pSentence[0] == '#')
 	{

@@ -32,22 +32,25 @@
 #include "client.h"
 #include "soundent.h"
 #include "gamerules.h"
-#include "customentity.h"
+#include "../../engine/customentity.h"
 #include "weapons.h"
-#include "weaponinfo.h"
-#include "usercmd.h"
-#include "netadr.h"
+#include "../../common/weaponinfo.h"
+#include "../../common/usercmd.h"
+#include "../../common/netadr.h"
 #include "game.h"
 #include "disc_objects.h"
+edict_t *EntSelectSpawnPoint( CBaseEntity *pPlayer );
 
 #if !defined ( _WIN32 )
 #include <ctype.h>
 #endif
 
-edict_t *EntSelectSpawnPoint( CBaseEntity *pPlayer );
-
 #include "discwar.h"
 #include "disc_arena.h"
+
+//Miagi for teamplay
+#include "teamplay_gamerules.h"
+
 
 extern DLL_GLOBAL ULONG		g_ulModelIndexPlayer;
 extern DLL_GLOBAL BOOL		g_fGameOver;
@@ -359,7 +362,7 @@ void Host_Say( edict_t *pEntity, int teamonly )
 	char *pc;
 	for ( pc = p; pc != NULL && *pc != 0; pc++ )
 	{
-		if ( isprint( *pc ) && !isspace( *pc ) )
+		if ( pc == NULL )
 		{
 			pc = NULL;	// we've found an alphanumeric character,  so text is valid
 			break;

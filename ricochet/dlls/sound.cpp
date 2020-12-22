@@ -1313,7 +1313,7 @@ void SENTENCEG_Init()
 		if (!buffer[i])
 			continue;
 
-		if (buffer[i] == '/' || !isalpha(buffer[i]))
+		if (buffer[i] == '/')
 			continue;
 
 		// get sentence name
@@ -1342,11 +1342,11 @@ void SENTENCEG_Init()
 		j--;
 		if (j <= i)
 			continue;
-		if (!isdigit(buffer[j]))
-			continue;
+		//if (!isdigit(buffer[j]))
+			//continue;
 
 		// cut out suffix numbers
-		while (j > i && isdigit(buffer[j]))
+		while (j > i)
 			j--;
 
 		if (j <= i)
@@ -1576,21 +1576,21 @@ void TEXTURETYPE_Init()
 	{
 		// skip whitespace
 		i = 0;
-		while(buffer[i] && isspace(buffer[i]))
+		while(buffer[i])
 			i++;
 		
 		if (!buffer[i])
 			continue;
 
 		// skip comment lines
-		if (buffer[i] == '/' || !isalpha(buffer[i]))
+		if (buffer[i] == '/')
 			continue;
 
 		// get texture type
-		grgchTextureType[gcTextures] = toupper(buffer[i++]);
+		//grgchTextureType[gcTextures] = toupper(buffer[i++]);
 
 		// skip whitespace
-		while(buffer[i] && isspace(buffer[i]))
+		while(buffer[i])
 			i++;
 		
 		if (!buffer[i])
@@ -1598,7 +1598,7 @@ void TEXTURETYPE_Init()
 
 		// get sentence name
 		j = i;
-		while (buffer[j] && !isspace(buffer[j]))
+		while (buffer[j])
 			j++;
 
 		if (!buffer[j])

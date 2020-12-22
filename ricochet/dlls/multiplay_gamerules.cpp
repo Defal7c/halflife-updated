@@ -15,6 +15,8 @@
 //
 // teamplay_gamerules.cpp
 //
+#include <ctype.h>
+
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"
@@ -25,11 +27,7 @@
 #include	"items.h"
 #include	"monsters.h"
 #include	"discwar.h"
-#include	"voice_gamemgr.h"
-
-#if !defined ( _WIN32 )
-#include <ctype.h>
-#endif
+#include	"../../game_shared/voice_gamemgr.h"
 
 extern DLL_GLOBAL CGameRules	*g_pGameRules;
 extern DLL_GLOBAL BOOL	g_fGameOver;
@@ -381,7 +379,8 @@ BOOL CHalfLifeMultiplay :: ClientConnected( edict_t *pEntity, const char *pszNam
 	g_VoiceGameMgr.ClientConnected(pEntity);
 
 	// Increase their speed to the Discwar speed
-	MESSAGE_BEGIN( MSG_ONE, SVC_STUFFTEXT, NULL, pEntity );
+	//MESSAGE_BEGIN( MSG_ONE, SVC_STUFFTEXT, NULL, pEntity );
+	MESSAGE_BEGIN( MSG_ONE, SVC_TEMPENTITY, NULL, pEntity );
 		WRITE_STRING( UTIL_VarArgs("cl_forwardspeed %d\ncl_backspeed %d\ncl_sidespeed %d\n", 320, 320, 320) );
 	MESSAGE_END();
 

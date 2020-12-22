@@ -15,7 +15,7 @@
 #ifndef EXTDLL_H
 #define EXTDLL_H
 
-#include "archtypes.h"     // DAL
+//#include "archtypes.h"     // DAL
 
 //
 // Global header file for extension DLLs

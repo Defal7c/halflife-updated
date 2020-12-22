@@ -58,6 +58,8 @@
 
 #define TEAM_NAME_LENGTH	16
 
+#include "../pm_shared/pm_materials.h"
+
 typedef enum
 {
 	PLAYER_IDLE,

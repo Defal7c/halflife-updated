@@ -9,7 +9,7 @@ DLLNAME=ricochet
 ARCH=i386
 
 #make sure this is the correct compiler for your system
-CC=gcc-9
+CC=gcc
 
 DLL_SRCDIR=.
 ENGINE_SRCDIR=../../engine
@@ -26,19 +26,19 @@ WPN_OBJ_DIR=$(DLL_OBJDIR)/wpn_shared
 BASE_CFLAGS=-Dstricmp=strcasecmp -D_strnicmp=strncasecmp -Dstrnicmp=strncasecmp -D_vsnprintf=vsnprintf
 
 #safe optimization
-#CFLAGS=$(BASE_CFLAGS) -w -m16 -O1
+CFLAGS=$(BASE_CFLAGS) -w -m486 -O1
 
 #full optimization
-CFLAGS=$(BASE_CFLAGS) -w -O2 -m16 -ffast-math -funroll-loops \
+#CFLAGS=$(BASE_CFLAGS) -w -O2 -m486 -ffast-math -funroll-loops \
 	-fomit-frame-pointer -fexpensive-optimizations \
-	-falign-loops=2 -falign-jumps=2 -falign-functions=2
+	-malign-loops=2 -malign-jumps=2 -malign-functions=2
 
-#use these when debugging
+#use these when debugging 
 #CFLAGS=$(BASE_CFLAGS) -g
 
 INCLUDEDIRS=-I. -I$(ENGINE_SRCDIR) -I$(COMMON_SRCDIR) -I$(PM_SHARED_SRCDIR) -I$(GAME_SHARED_SRCDIR)
 
-LDFLAGS=-lm
+LDFLAGS=
 
 SHLIBEXT=so
 SHLIBCFLAGS=-fPIC
@@ -133,3 +133,4 @@ spotless: clean
 	-rm -r $(GAME_SHARED_OBJDIR)
 	-rm -r $(PM_SHARED_OBJDIR)
 	-rm -r $(DLL_OBJDIR)
+

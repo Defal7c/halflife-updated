@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1999, 2000 Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -42,7 +42,7 @@ CBaseEntity
 // UNDONE: This will ignore transition volumes (trigger_transition), but not the PVS!!!
 #define		FCAP_FORCE_TRANSITION		0x00000080		// ALWAYS goes across transitions
 
-//#include "archtypes.h"     // DAL
+#include "archtypes.h"     // DAL
 #include "saverestore.h"
 #include "schedule.h"
 
@@ -132,7 +132,7 @@ public:
 //
 // Base Entity.  All entity types derive from this
 //
-class CBaseEntity
+class CBaseEntity 
 {
 public:
 	// Constructor.  Set engine to use C/C++ callback functions
@@ -141,7 +141,7 @@ public:
 
 	// path corners
 	CBaseEntity			*m_pGoalEnt;// path corner we are heading towards
-	CBaseEntity			*m_pLink;// used for temporary link-list operations.
+	CBaseEntity			*m_pLink;// used for temporary link-list operations. 
 
 	// initialization functions
 	virtual void	Spawn( void ) { return; }
@@ -151,7 +151,7 @@ public:
 	virtual int		Restore( CRestore &restore );
 	virtual int		ObjectCaps( void ) { return FCAP_ACROSS_TRANSITION; }
 	virtual void	Activate( void ) {}
-
+	
 	// Setup the object->object collision box (pev->mins / pev->maxs is the object->world collision box)
 	virtual void	SetObjectCollisionBox( void );
 
@@ -201,7 +201,7 @@ public:
 
 //	virtual void	SetActivator( CBaseEntity *pActivator ) {}
 	virtual CBaseEntity *GetNextTarget( void );
-
+	
 	// fundamental callbacks
 	void (CBaseEntity ::*m_pfnThink)(void);
 	void (CBaseEntity ::*m_pfnTouch)( CBaseEntity *pOther );
@@ -210,9 +210,9 @@ public:
 
 	virtual void Think( void ) { if (m_pfnThink) (this->*m_pfnThink)(); };
 	virtual void Touch( CBaseEntity *pOther ) { if (m_pfnTouch) (this->*m_pfnTouch)( pOther ); };
-	virtual void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
-	{
-		if (m_pfnUse)
+	virtual void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) 
+	{ 
+		if (m_pfnUse) 
 			(this->*m_pfnUse)( pActivator, pCaller, useType, value );
 	}
 	virtual void Blocked( CBaseEntity *pOther ) { if (m_pfnBlocked) (this->*m_pfnBlocked)( pOther ); };
@@ -252,36 +252,36 @@ public:
 	BOOL    IsLockedByMaster( void ) { return FALSE; }
 
 #ifdef _DEBUG
-	static CBaseEntity *Instance( edict_t *pent )
-	{
+	static CBaseEntity *Instance( edict_t *pent ) 
+	{ 
 		if ( !pent )
 			pent = ENT(0);
-		CBaseEntity *pEnt = (CBaseEntity *)GET_PRIVATE(pent);
-		ASSERT(pEnt!=NULL);
-		return pEnt;
+		CBaseEntity *pEnt = (CBaseEntity *)GET_PRIVATE(pent); 
+		ASSERT(pEnt!=NULL); 
+		return pEnt; 
 	}
 #else
 	static CBaseEntity *Instance( edict_t *pent )
-	{
+	{ 
 		if ( !pent )
 			pent = ENT(0);
-		CBaseEntity *pEnt = (CBaseEntity *)GET_PRIVATE(pent);
-		return pEnt;
+		CBaseEntity *pEnt = (CBaseEntity *)GET_PRIVATE(pent); 
+		return pEnt; 
 	}
 #endif
 
 	static CBaseEntity *Instance( entvars_t *pev ) { return Instance( ENT( pev ) ); }
 	static CBaseEntity *Instance( int eoffset) { return Instance( ENT( eoffset) ); }
 
-	CBaseMonster *GetMonsterPointer( entvars_t *pevMonster )
-	{
+	CBaseMonster *GetMonsterPointer( entvars_t *pevMonster ) 
+	{ 
 		CBaseEntity *pEntity = Instance( pevMonster );
 		if ( pEntity )
 			return pEntity->MyMonsterPointer();
 		return NULL;
 	}
-	CBaseMonster *GetMonsterPointer( edict_t *pentMonster )
-	{
+	CBaseMonster *GetMonsterPointer( edict_t *pentMonster ) 
+	{ 
 		CBaseEntity *pEntity = Instance( pentMonster );
 		if ( pEntity )
 			return pEntity->MyMonsterPointer();
@@ -291,36 +291,36 @@ public:
 
 	// Ugly code to lookup all functions to make sure they are exported when set.
 #ifdef _DEBUG
-	void FunctionCheck( void *pFunction, char *name )
-	{
+	void FunctionCheck( void *pFunction, char *name ) 
+	{ 
 #ifdef _WIN32
 		if (pFunction && !NAME_FOR_FUNCTION((uint32)pFunction) )
 			ALERT( at_error, "No EXPORT: %s:%s (%08lx)\n", STRING(pev->classname), name, pFunction );
 #endif // _WIN32
 	}
 
-	BASEPTR	ThinkSet( BASEPTR func, char *name )
-	{
-		m_pfnThink = func;
-		FunctionCheck( (void *)*((int *)((char *)this + ( offsetof(CBaseEntity,m_pfnThink)))), name );
+	BASEPTR	ThinkSet( BASEPTR func, char *name ) 
+	{ 
+		m_pfnThink = func; 
+		FunctionCheck( (void *)*((int *)((char *)this + ( offsetof(CBaseEntity,m_pfnThink)))), name ); 
 		return func;
 	}
-	ENTITYFUNCPTR TouchSet( ENTITYFUNCPTR func, char *name )
-	{
-		m_pfnTouch = func;
-		FunctionCheck( (void *)*((int *)((char *)this + ( offsetof(CBaseEntity,m_pfnTouch)))), name );
+	ENTITYFUNCPTR TouchSet( ENTITYFUNCPTR func, char *name ) 
+	{ 
+		m_pfnTouch = func; 
+		FunctionCheck( (void *)*((int *)((char *)this + ( offsetof(CBaseEntity,m_pfnTouch)))), name ); 
 		return func;
 	}
-	USEPTR	UseSet( USEPTR func, char *name )
-	{
-		m_pfnUse = func;
-		FunctionCheck( (void *)*((int *)((char *)this + ( offsetof(CBaseEntity,m_pfnUse)))), name );
+	USEPTR	UseSet( USEPTR func, char *name ) 
+	{ 
+		m_pfnUse = func; 
+		FunctionCheck( (void *)*((int *)((char *)this + ( offsetof(CBaseEntity,m_pfnUse)))), name ); 
 		return func;
 	}
-	ENTITYFUNCPTR	BlockedSet( ENTITYFUNCPTR func, char *name )
-	{
-		m_pfnBlocked = func;
-		FunctionCheck( (void *)*((int *)((char *)this + ( offsetof(CBaseEntity,m_pfnBlocked)))), name );
+	ENTITYFUNCPTR	BlockedSet( ENTITYFUNCPTR func, char *name ) 
+	{ 
+		m_pfnBlocked = func; 
+		FunctionCheck( (void *)*((int *)((char *)this + ( offsetof(CBaseEntity,m_pfnBlocked)))), name ); 
 		return func;
 	}
 
@@ -328,7 +328,7 @@ public:
 
 
 	// virtual functions used by a few classes
-
+	
 	// used by monsters that are created by the MonsterMaker
 	virtual	void UpdateOwner( void ) { return; };
 
@@ -358,7 +358,7 @@ public:
 
 
 // Ugly technique to override base member functions
-// Normally it's illegal to cast a pointer to a member function of a derived class to a pointer to a
+// Normally it's illegal to cast a pointer to a member function of a derived class to a pointer to a 
 // member function of a base class.  static_cast is a sleezy way around that problem.
 
 #ifdef _DEBUG
@@ -446,7 +446,7 @@ public:
 	virtual void	KeyValue( KeyValueData* pkvd);
 	virtual int		Save( CSave &save );
 	virtual int		Restore( CRestore &restore );
-
+	
 	static	TYPEDESCRIPTION m_SaveData[];
 	// common member functions
 	void SUB_UseTargets( CBaseEntity *pActivator, USE_TYPE useType, float value );
@@ -495,7 +495,7 @@ public:
 //
 // generic Toggle entity.
 //
-#define	SF_ITEM_USE_ONLY	256 //  ITEM_USE_ONLY = BUTTON_USE_ONLY = DOOR_USE_ONLY!!!
+#define	SF_ITEM_USE_ONLY	256 //  ITEM_USE_ONLY = BUTTON_USE_ONLY = DOOR_USE_ONLY!!! 
 
 class CBaseToggle : public CBaseAnimating
 {
@@ -544,7 +544,7 @@ public:
 	static float		AxisDelta( int flags, const Vector &angle1, const Vector &angle2 );
 
 	string_t m_sMaster;		// If this button has a master switch, this is the targetname.
-							// A master switch must be of the multisource type. If all
+							// A master switch must be of the multisource type. If all 
 							// of the switches in the multisource have been triggered, then
 							// the button will be allowed to operate. Otherwise, it will be
 							// deactivated.
@@ -594,7 +594,7 @@ public:
 #define DMG_CLUB			(1 << 7)	// crowbar, punch, headbutt
 #define DMG_SHOCK			(1 << 8)	// electric shock
 #define DMG_SONIC			(1 << 9)	// sound pulse shockwave
-#define DMG_ENERGYBEAM		(1 << 10)	// laser or other high energy beam
+#define DMG_ENERGYBEAM		(1 << 10)	// laser or other high energy beam 
 #define DMG_NEVERGIB		(1 << 12)	// with this bit OR'd in, no damage type will be able to gib victims upon death
 #define DMG_ALWAYSGIB		(1 << 13)	// with this bit OR'd in, any damage type can be made to gib victims upon death.
 #define DMG_DROWN			(1 << 14)	// Drowning
@@ -641,7 +641,7 @@ public:
 #define SLOWFREEZE_DAMAGE	1.0
 
 
-#define	itbd_Paralyze		0
+#define	itbd_Paralyze		0		
 #define	itbd_NerveGas		1
 #define	itbd_Poison			2
 #define	itbd_Radiation		3
@@ -651,7 +651,7 @@ public:
 #define	itbd_SlowFreeze		7
 #define CDMG_TIMEBASED		8
 
-// when calling KILLED(), a value that governs gib behavior is expected to be
+// when calling KILLED(), a value that governs gib behavior is expected to be 
 // one of these three values
 #define GIB_NORMAL			0// gib if entity was overkilled
 #define GIB_NEVER			1// never gib, no matter how much death damage is done ( freezing, etc )
@@ -691,10 +691,10 @@ public:
 	virtual int		TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType );
 	virtual int		Save( CSave &save );
 	virtual int		Restore( CRestore &restore );
-
+	
 	enum BUTTON_CODE { BUTTON_NOTHING, BUTTON_ACTIVATE, BUTTON_RETURN };
 	BUTTON_CODE	ButtonResponseToTouch( void );
-
+	
 	static	TYPEDESCRIPTION m_SaveData[];
 	// Buttons that don't take damage can be IMPULSE used
 	virtual int	ObjectCaps( void ) { return (CBaseToggle:: ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | (pev->takedamage?0:FCAP_IMPULSE_USE); }
@@ -707,16 +707,16 @@ public:
 							// to the button's ChangeTarget. This allows you to make a func_train switch paths, etc.
 
 	locksound_t m_ls;			// door lock sounds
-
+	
 	BYTE	m_bLockedSound;		// ordinals from entity selection
-	BYTE	m_bLockedSentence;
-	BYTE	m_bUnlockedSound;
+	BYTE	m_bLockedSentence;	
+	BYTE	m_bUnlockedSound;	
 	BYTE	m_bUnlockedSentence;
 	int		m_sounds;
 };
 
 //
-// Weapons
+// Weapons 
 //
 
 #define	BAD_WEAPON 0x00007FFF
@@ -736,9 +736,9 @@ template <class T> T * GetClassPtr( T *a )
 	// get the private data
 	a = (T *)GET_PRIVATE(ENT(pev));
 
-	if (a == NULL)
+	if (a == NULL) 
 	{
-		// allocate private data
+		// allocate private data 
 		a = new(pev) T;
 		a->pev = pev;
 	}

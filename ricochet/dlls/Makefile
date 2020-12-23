@@ -6,10 +6,10 @@
 
 DLLNAME=ricochet
 
-ARCH=i686
+ARCH=i386
 
 #make sure this is the correct compiler for your system
-CC=gcc
+CC=gcc-9
 
 DLL_SRCDIR=.
 ENGINE_SRCDIR=../../engine

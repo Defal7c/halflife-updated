@@ -13116,7 +13116,7 @@ LOAD /usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib32/crtn.o
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000   0x1b16e5
+.debug_info     0x0000000000000000   0x1b1b23
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x0000000000000000     0x6d77 release/obj/dmcdll/animating.o
  .debug_info    0x0000000000006d77     0x5cf2 release/obj/dmcdll/animation.o
@@ -13166,7 +13166,7 @@ LOAD /usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib32/crtn.o
  .debug_info    0x00000000001a23d8     0x6ffb release/obj/dmcdll/pm_shared/pm_shared.o
  .debug_info    0x00000000001a93d3     0x121f release/obj/dmcdll/pm_shared/pm_math.o
  .debug_info    0x00000000001aa5f2     0x1e41 release/obj/dmcdll/pm_shared/pm_debug.o
- .debug_info    0x00000000001ac433     0x52b2 release/obj/dmcdll/game_shared/voice_gamemgr.o
+ .debug_info    0x00000000001ac433     0x56f0 release/obj/dmcdll/game_shared/voice_gamemgr.o
 
 .debug_abbrev   0x0000000000000000    0x1ac71
  *(.debug_abbrev)
@@ -13220,7 +13220,7 @@ LOAD /usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib32/crtn.o
  .debug_abbrev  0x000000000001a06a      0x3c5 release/obj/dmcdll/pm_shared/pm_debug.o
  .debug_abbrev  0x000000000001a42f      0x842 release/obj/dmcdll/game_shared/voice_gamemgr.o
 
-.debug_line     0x0000000000000000    0x7ae32
+.debug_line     0x0000000000000000    0x7ae3f
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x0000000000000000     0x1851 release/obj/dmcdll/animating.o
  .debug_line    0x0000000000001851      0xc02 release/obj/dmcdll/animation.o
@@ -13271,113 +13271,113 @@ LOAD /usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib32/crtn.o
  .debug_line    0x00000000000744d6     0x41ec release/obj/dmcdll/pm_shared/pm_shared.o
  .debug_line    0x00000000000786c2      0xfe3 release/obj/dmcdll/pm_shared/pm_math.o
  .debug_line    0x00000000000796a5      0xa14 release/obj/dmcdll/pm_shared/pm_debug.o
- .debug_line    0x000000000007a0b9      0xd79 release/obj/dmcdll/game_shared/voice_gamemgr.o
+ .debug_line    0x000000000007a0b9      0xd86 release/obj/dmcdll/game_shared/voice_gamemgr.o
 
 .debug_frame
  *(.debug_frame)
 
-.debug_str      0x0000000000000000    0x285d6
+.debug_str      0x0000000000000000    0x288b2
  *(.debug_str)
- .debug_str     0x0000000000000000     0x34d5 release/obj/dmcdll/animating.o
+ .debug_str     0x0000000000000000     0x34ce release/obj/dmcdll/animating.o
                                        0x3947 (size before relaxing)
- .debug_str     0x00000000000034d5     0x1271 release/obj/dmcdll/animation.o
+ .debug_str     0x00000000000034ce     0x1271 release/obj/dmcdll/animation.o
                                        0x2f30 (size before relaxing)
- .debug_str     0x0000000000004746     0x110c release/obj/dmcdll/bmodels.o
+ .debug_str     0x000000000000473f     0x110c release/obj/dmcdll/bmodels.o
                                        0x42b8 (size before relaxing)
- .debug_str     0x0000000000005852     0x18c4 release/obj/dmcdll/buttons.o
+ .debug_str     0x000000000000584b     0x18c4 release/obj/dmcdll/buttons.o
                                        0x4ec8 (size before relaxing)
- .debug_str     0x0000000000007116     0x1210 release/obj/dmcdll/cbase.o
+ .debug_str     0x000000000000710f     0x1210 release/obj/dmcdll/cbase.o
                                        0x4c46 (size before relaxing)
- .debug_str     0x0000000000008326     0x1787 release/obj/dmcdll/client.o
+ .debug_str     0x000000000000831f     0x1787 release/obj/dmcdll/client.o
                                        0x4a21 (size before relaxing)
- .debug_str     0x0000000000009aad      0xc78 release/obj/dmcdll/combat.o
+ .debug_str     0x0000000000009aa6      0xc78 release/obj/dmcdll/combat.o
                                        0x3d20 (size before relaxing)
- .debug_str     0x000000000000a725      0x748 release/obj/dmcdll/doors.o
+ .debug_str     0x000000000000a71e      0x748 release/obj/dmcdll/doors.o
                                        0x4106 (size before relaxing)
- .debug_str     0x000000000000ae6d     0x2569 release/obj/dmcdll/effects.o
+ .debug_str     0x000000000000ae66     0x2569 release/obj/dmcdll/effects.o
                                        0x6529 (size before relaxing)
- .debug_str     0x000000000000d3d6      0x3c0 release/obj/dmcdll/explode.o
+ .debug_str     0x000000000000d3cf      0x3c0 release/obj/dmcdll/explode.o
                                        0x4467 (size before relaxing)
- .debug_str     0x000000000000d796      0x99b release/obj/dmcdll/func_break.o
+ .debug_str     0x000000000000d78f      0x99b release/obj/dmcdll/func_break.o
                                        0x443e (size before relaxing)
- .debug_str     0x000000000000e131     0x1014 release/obj/dmcdll/func_tank.o
+ .debug_str     0x000000000000e12a     0x1014 release/obj/dmcdll/func_tank.o
                                        0x4d43 (size before relaxing)
- .debug_str     0x000000000000f145     0x1423 release/obj/dmcdll/game.o
+ .debug_str     0x000000000000f13e     0x1423 release/obj/dmcdll/game.o
                                        0x2e8c (size before relaxing)
- .debug_str     0x0000000000010568     0x1524 release/obj/dmcdll/gamerules.o
+ .debug_str     0x0000000000010561     0x1524 release/obj/dmcdll/gamerules.o
                                        0x32f6 (size before relaxing)
- .debug_str     0x0000000000011a8c       0x6c release/obj/dmcdll/globals.o
+ .debug_str     0x0000000000011a85       0x6c release/obj/dmcdll/globals.o
                                         0xaf9 (size before relaxing)
- .debug_str     0x0000000000011af8      0x1fb release/obj/dmcdll/h_ai.o
+ .debug_str     0x0000000000011af1      0x1fb release/obj/dmcdll/h_ai.o
                                        0x1f59 (size before relaxing)
- .debug_str     0x0000000000011cf3       0x3d release/obj/dmcdll/h_export.o
+ .debug_str     0x0000000000011cec       0x3d release/obj/dmcdll/h_export.o
                                        0x1bf9 (size before relaxing)
- .debug_str     0x0000000000011d30      0x277 release/obj/dmcdll/lights.o
+ .debug_str     0x0000000000011d29      0x277 release/obj/dmcdll/lights.o
                                        0x3592 (size before relaxing)
- .debug_str     0x0000000000011fa7     0x17d4 release/obj/dmcdll/maprules.o
+ .debug_str     0x0000000000011fa0     0x17d4 release/obj/dmcdll/maprules.o
                                        0x4df1 (size before relaxing)
- .debug_str     0x000000000001377b     0x1de3 release/obj/dmcdll/monsters.o
+ .debug_str     0x0000000000013774     0x1de3 release/obj/dmcdll/monsters.o
                                        0x5e01 (size before relaxing)
- .debug_str     0x000000000001555e       0x1d release/obj/dmcdll/monsterstate.o
+ .debug_str     0x0000000000015557       0x1d release/obj/dmcdll/monsterstate.o
                                         0x85c (size before relaxing)
- .debug_str     0x000000000001557b     0x1653 release/obj/dmcdll/multiplay_gamerules.o
+ .debug_str     0x0000000000015574     0x1653 release/obj/dmcdll/multiplay_gamerules.o
                                        0x4535 (size before relaxing)
- .debug_str     0x0000000000016bce     0x2645 release/obj/dmcdll/nodes.o
+ .debug_str     0x0000000000016bc7     0x2645 release/obj/dmcdll/nodes.o
                                        0x5d07 (size before relaxing)
- .debug_str     0x0000000000019213       0x69 release/obj/dmcdll/observer.o
+ .debug_str     0x000000000001920c       0x69 release/obj/dmcdll/observer.o
                                        0x1ec6 (size before relaxing)
- .debug_str     0x000000000001927c      0x500 release/obj/dmcdll/pathcorner.o
+ .debug_str     0x0000000000019275      0x500 release/obj/dmcdll/pathcorner.o
                                        0x3950 (size before relaxing)
- .debug_str     0x000000000001977c       0xd8 release/obj/dmcdll/plane.o
+ .debug_str     0x0000000000019775       0xd8 release/obj/dmcdll/plane.o
                                         0xaed (size before relaxing)
- .debug_str     0x0000000000019854     0x1960 release/obj/dmcdll/plats.o
+ .debug_str     0x000000000001984d     0x1960 release/obj/dmcdll/plats.o
                                        0x5e26 (size before relaxing)
- .debug_str     0x000000000001b1b4     0x2a70 release/obj/dmcdll/player.o
+ .debug_str     0x000000000001b1ad     0x2a70 release/obj/dmcdll/player.o
                                        0x8ff9 (size before relaxing)
- .debug_str     0x000000000001dc24      0x3f4 release/obj/dmcdll/quake_gun.o
+ .debug_str     0x000000000001dc1d      0x3f4 release/obj/dmcdll/quake_gun.o
                                        0x31ab (size before relaxing)
- .debug_str     0x000000000001e018     0x1d28 release/obj/dmcdll/quake_items.o
+ .debug_str     0x000000000001e011     0x1d28 release/obj/dmcdll/quake_items.o
                                        0x4a9b (size before relaxing)
- .debug_str     0x000000000001fd40      0x19d release/obj/dmcdll/quake_nail.o
+ .debug_str     0x000000000001fd39      0x19d release/obj/dmcdll/quake_nail.o
                                        0x29da (size before relaxing)
- .debug_str     0x000000000001fedd       0x4d release/obj/dmcdll/quake_player.o
+ .debug_str     0x000000000001fed6       0x4d release/obj/dmcdll/quake_player.o
                                        0x229b (size before relaxing)
- .debug_str     0x000000000001ff2a      0x2b7 release/obj/dmcdll/quake_rocket.o
+ .debug_str     0x000000000001ff23      0x2b7 release/obj/dmcdll/quake_rocket.o
                                        0x2b19 (size before relaxing)
- .debug_str     0x00000000000201e1      0x18b release/obj/dmcdll/quake_weapons_all.o
+ .debug_str     0x00000000000201da      0x18b release/obj/dmcdll/quake_weapons_all.o
                                        0x2835 (size before relaxing)
- .debug_str     0x000000000002036c       0x26 release/obj/dmcdll/schedule.o
+ .debug_str     0x0000000000020365       0x26 release/obj/dmcdll/schedule.o
                                         0x9ba (size before relaxing)
- .debug_str     0x0000000000020392      0x88e release/obj/dmcdll/singleplay_gamerules.o
+ .debug_str     0x000000000002038b      0x88e release/obj/dmcdll/singleplay_gamerules.o
                                        0x234b (size before relaxing)
- .debug_str     0x0000000000020c20       0x36 release/obj/dmcdll/skill.o
+ .debug_str     0x0000000000020c19       0x36 release/obj/dmcdll/skill.o
                                        0x1fc1 (size before relaxing)
- .debug_str     0x0000000000020c56      0xab8 release/obj/dmcdll/sound.o
+ .debug_str     0x0000000000020c4f      0xab8 release/obj/dmcdll/sound.o
                                        0x4f73 (size before relaxing)
- .debug_str     0x000000000002170e       0x9e release/obj/dmcdll/spectator.o
+ .debug_str     0x0000000000021707       0x9e release/obj/dmcdll/spectator.o
                                        0x2747 (size before relaxing)
- .debug_str     0x00000000000217ac      0x59e release/obj/dmcdll/subs.o
+ .debug_str     0x00000000000217a5      0x59e release/obj/dmcdll/subs.o
                                        0x4c84 (size before relaxing)
- .debug_str     0x0000000000021d4a      0x668 release/obj/dmcdll/teamplay_gamerules.o
+ .debug_str     0x0000000000021d43      0x668 release/obj/dmcdll/teamplay_gamerules.o
                                        0x2a32 (size before relaxing)
- .debug_str     0x00000000000223b2       0x24 release/obj/dmcdll/threewave_gamerules.o
+ .debug_str     0x00000000000223ab       0x24 release/obj/dmcdll/threewave_gamerules.o
                                          0xde (size before relaxing)
- .debug_str     0x00000000000223d6     0x2cb3 release/obj/dmcdll/triggers.o
+ .debug_str     0x00000000000223cf     0x2cb3 release/obj/dmcdll/triggers.o
                                        0x7900 (size before relaxing)
- .debug_str     0x0000000000025089      0xb39 release/obj/dmcdll/util.o
+ .debug_str     0x0000000000025082      0xb39 release/obj/dmcdll/util.o
                                        0x4d1a (size before relaxing)
- .debug_str     0x0000000000025bc2      0xe2d release/obj/dmcdll/weapons.o
+ .debug_str     0x0000000000025bbb      0xe2d release/obj/dmcdll/weapons.o
                                        0x5442 (size before relaxing)
- .debug_str     0x00000000000269ef      0x3c6 release/obj/dmcdll/world.o
+ .debug_str     0x00000000000269e8      0x3c6 release/obj/dmcdll/world.o
                                        0x4896 (size before relaxing)
- .debug_str     0x0000000000026db5      0xe9c release/obj/dmcdll/pm_shared/pm_shared.o
+ .debug_str     0x0000000000026dae      0xe9c release/obj/dmcdll/pm_shared/pm_shared.o
                                        0x2584 (size before relaxing)
- .debug_str     0x0000000000027c51      0x2ea release/obj/dmcdll/pm_shared/pm_math.o
+ .debug_str     0x0000000000027c4a      0x2ea release/obj/dmcdll/pm_shared/pm_math.o
                                         0x68c (size before relaxing)
- .debug_str     0x0000000000027f3b      0x158 release/obj/dmcdll/pm_shared/pm_debug.o
+ .debug_str     0x0000000000027f34      0x158 release/obj/dmcdll/pm_shared/pm_debug.o
                                         0xc17 (size before relaxing)
- .debug_str     0x0000000000028093      0x543 release/obj/dmcdll/game_shared/voice_gamemgr.o
-                                       0x2398 (size before relaxing)
+ .debug_str     0x000000000002808c      0x826 release/obj/dmcdll/game_shared/voice_gamemgr.o
+                                       0x26b1 (size before relaxing)
 
 .debug_loc      0x0000000000000000    0xb7dee
  *(.debug_loc)

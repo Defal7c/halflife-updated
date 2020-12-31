@@ -26718,7 +26718,7 @@ LOAD /usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib32/crtn.o
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x0000000000000000   0x3d5dd0
+.debug_info     0x0000000000000000   0x3d620e
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x0000000000000000     0xb43a release/obj/hldll/aflock.o
  .debug_info    0x000000000000b43a     0xbcc0 release/obj/hldll/agrunt.o
@@ -26820,7 +26820,7 @@ LOAD /usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib32/crtn.o
  .debug_info    0x00000000003c5632     0x83d0 release/obj/hldll/pm_shared/pm_shared.o
  .debug_info    0x00000000003cda02     0x1223 release/obj/hldll/pm_shared/pm_math.o
  .debug_info    0x00000000003cec25     0x1ef9 release/obj/hldll/pm_shared/pm_debug.o
- .debug_info    0x00000000003d0b1e     0x52b2 release/obj/hldll/game_shared/voice_gamemgr.o
+ .debug_info    0x00000000003d0b1e     0x56f0 release/obj/hldll/game_shared/voice_gamemgr.o
 
 .debug_abbrev   0x0000000000000000    0x3c577
  *(.debug_abbrev)
@@ -26926,7 +26926,7 @@ LOAD /usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib32/crtn.o
  .debug_abbrev  0x000000000003b953      0x3e2 release/obj/hldll/pm_shared/pm_debug.o
  .debug_abbrev  0x000000000003bd35      0x842 release/obj/hldll/game_shared/voice_gamemgr.o
 
-.debug_line     0x0000000000000000    0xffd13
+.debug_line     0x0000000000000000    0xffd20
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x0000000000000000     0x336b release/obj/hldll/aflock.o
  .debug_line    0x000000000000336b     0x2cdd release/obj/hldll/agrunt.o
@@ -27029,217 +27029,217 @@ LOAD /usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib32/crtn.o
  .debug_line    0x00000000000f864d     0x4f5d release/obj/hldll/pm_shared/pm_shared.o
  .debug_line    0x00000000000fd5aa      0xfdf release/obj/hldll/pm_shared/pm_math.o
  .debug_line    0x00000000000fe589      0xa11 release/obj/hldll/pm_shared/pm_debug.o
- .debug_line    0x00000000000fef9a      0xd79 release/obj/hldll/game_shared/voice_gamemgr.o
+ .debug_line    0x00000000000fef9a      0xd86 release/obj/hldll/game_shared/voice_gamemgr.o
 
 .debug_frame
  *(.debug_frame)
 
-.debug_str      0x0000000000000000    0x3ce4b
+.debug_str      0x0000000000000000    0x3d127
  *(.debug_str)
- .debug_str     0x0000000000000000     0x43ac release/obj/hldll/aflock.o
+ .debug_str     0x0000000000000000     0x43a5 release/obj/hldll/aflock.o
                                        0x48ea (size before relaxing)
- .debug_str     0x00000000000043ac     0x205f release/obj/hldll/agrunt.o
+ .debug_str     0x00000000000043a5     0x205f release/obj/hldll/agrunt.o
                                        0x5f0a (size before relaxing)
- .debug_str     0x000000000000640b      0x283 release/obj/hldll/airtank.o
+ .debug_str     0x0000000000006404      0x283 release/obj/hldll/airtank.o
                                        0x3fc0 (size before relaxing)
- .debug_str     0x000000000000668e      0x6b7 release/obj/hldll/animating.o
+ .debug_str     0x0000000000006687      0x6b7 release/obj/hldll/animating.o
                                        0x3944 (size before relaxing)
- .debug_str     0x0000000000006d45      0xe16 release/obj/hldll/animation.o
+ .debug_str     0x0000000000006d3e      0xe16 release/obj/hldll/animation.o
                                        0x2f2c (size before relaxing)
- .debug_str     0x0000000000007b5b      0x9d5 release/obj/hldll/apache.o
+ .debug_str     0x0000000000007b54      0x9d5 release/obj/hldll/apache.o
                                        0x5152 (size before relaxing)
- .debug_str     0x0000000000008530      0x3c8 release/obj/hldll/barnacle.o
+ .debug_str     0x0000000000008529      0x3c8 release/obj/hldll/barnacle.o
                                        0x44ff (size before relaxing)
- .debug_str     0x00000000000088f8      0xd9e release/obj/hldll/barney.o
+ .debug_str     0x00000000000088f1      0xd9e release/obj/hldll/barney.o
                                        0x6101 (size before relaxing)
- .debug_str     0x0000000000009696     0x11a3 release/obj/hldll/bigmomma.o
+ .debug_str     0x000000000000968f     0x11a3 release/obj/hldll/bigmomma.o
                                        0x67c9 (size before relaxing)
- .debug_str     0x000000000000a839      0x230 release/obj/hldll/bloater.o
+ .debug_str     0x000000000000a832      0x230 release/obj/hldll/bloater.o
                                        0x3383 (size before relaxing)
- .debug_str     0x000000000000aa69      0xe0f release/obj/hldll/bmodels.o
+ .debug_str     0x000000000000aa62      0xe0f release/obj/hldll/bmodels.o
                                        0x42b5 (size before relaxing)
- .debug_str     0x000000000000b878      0xa4f release/obj/hldll/bullsquid.o
+ .debug_str     0x000000000000b871      0xa4f release/obj/hldll/bullsquid.o
                                        0x62da (size before relaxing)
- .debug_str     0x000000000000c2c7     0x15c8 release/obj/hldll/buttons.o
+ .debug_str     0x000000000000c2c0     0x15c8 release/obj/hldll/buttons.o
                                        0x4eb3 (size before relaxing)
- .debug_str     0x000000000000d88f      0xeb0 release/obj/hldll/cbase.o
+ .debug_str     0x000000000000d888      0xeb0 release/obj/hldll/cbase.o
                                        0x4ccc (size before relaxing)
- .debug_str     0x000000000000e73f     0x1647 release/obj/hldll/client.o
+ .debug_str     0x000000000000e738     0x1647 release/obj/hldll/client.o
                                        0x4fd1 (size before relaxing)
- .debug_str     0x000000000000fd86      0xcbf release/obj/hldll/combat.o
+ .debug_str     0x000000000000fd7f      0xcbf release/obj/hldll/combat.o
                                        0x4c47 (size before relaxing)
- .debug_str     0x0000000000010a45      0xe99 release/obj/hldll/controller.o
+ .debug_str     0x0000000000010a3e      0xe99 release/obj/hldll/controller.o
                                        0x69a3 (size before relaxing)
- .debug_str     0x00000000000118de      0xce3 release/obj/hldll/crossbow.o
+ .debug_str     0x00000000000118d7      0xce3 release/obj/hldll/crossbow.o
                                        0x403d (size before relaxing)
- .debug_str     0x00000000000125c1      0x310 release/obj/hldll/crowbar.o
+ .debug_str     0x00000000000125ba      0x310 release/obj/hldll/crowbar.o
                                        0x3a6f (size before relaxing)
- .debug_str     0x00000000000128d1      0x4dd release/obj/hldll/defaultai.o
+ .debug_str     0x00000000000128ca      0x4dd release/obj/hldll/defaultai.o
                                        0x318a (size before relaxing)
- .debug_str     0x0000000000012dae      0x6be release/obj/hldll/doors.o
+ .debug_str     0x0000000000012da7      0x6be release/obj/hldll/doors.o
                                        0x4093 (size before relaxing)
- .debug_str     0x000000000001346c     0x2344 release/obj/hldll/effects.o
+ .debug_str     0x0000000000013465     0x2344 release/obj/hldll/effects.o
                                        0x6527 (size before relaxing)
- .debug_str     0x00000000000157b0      0x4dd release/obj/hldll/egon.o
+ .debug_str     0x00000000000157a9      0x4dd release/obj/hldll/egon.o
                                        0x405f (size before relaxing)
- .debug_str     0x0000000000015c8d      0x34f release/obj/hldll/explode.o
+ .debug_str     0x0000000000015c86      0x34f release/obj/hldll/explode.o
                                        0x4465 (size before relaxing)
- .debug_str     0x0000000000015fdc      0x525 release/obj/hldll/flyingmonster.o
+ .debug_str     0x0000000000015fd5      0x525 release/obj/hldll/flyingmonster.o
                                        0x3478 (size before relaxing)
- .debug_str     0x0000000000016501      0x91d release/obj/hldll/func_break.o
+ .debug_str     0x00000000000164fa      0x91d release/obj/hldll/func_break.o
                                        0x443c (size before relaxing)
- .debug_str     0x0000000000016e1e      0xe84 release/obj/hldll/func_tank.o
+ .debug_str     0x0000000000016e17      0xe84 release/obj/hldll/func_tank.o
                                        0x4d23 (size before relaxing)
- .debug_str     0x0000000000017ca2     0x1411 release/obj/hldll/game.o
+ .debug_str     0x0000000000017c9b     0x1411 release/obj/hldll/game.o
                                        0x2e99 (size before relaxing)
- .debug_str     0x00000000000190b3     0x1053 release/obj/hldll/gamerules.o
+ .debug_str     0x00000000000190ac     0x1053 release/obj/hldll/gamerules.o
                                        0x3305 (size before relaxing)
- .debug_str     0x000000000001a106      0xbfb release/obj/hldll/gargantua.o
+ .debug_str     0x000000000001a0ff      0xbfb release/obj/hldll/gargantua.o
                                        0x6ed3 (size before relaxing)
- .debug_str     0x000000000001ad01      0x3ad release/obj/hldll/gauss.o
+ .debug_str     0x000000000001acfa      0x3ad release/obj/hldll/gauss.o
                                        0x3ba1 (size before relaxing)
- .debug_str     0x000000000001b0ae      0x1c6 release/obj/hldll/genericmonster.o
+ .debug_str     0x000000000001b0a7      0x1c6 release/obj/hldll/genericmonster.o
                                        0x329a (size before relaxing)
- .debug_str     0x000000000001b274      0x46f release/obj/hldll/ggrenade.o
+ .debug_str     0x000000000001b26d      0x46f release/obj/hldll/ggrenade.o
                                        0x4203 (size before relaxing)
- .debug_str     0x000000000001b6e3       0x68 release/obj/hldll/globals.o
+ .debug_str     0x000000000001b6dc       0x68 release/obj/hldll/globals.o
                                         0xaf5 (size before relaxing)
- .debug_str     0x000000000001b74b      0x303 release/obj/hldll/gman.o
+ .debug_str     0x000000000001b744      0x303 release/obj/hldll/gman.o
                                        0x4a4a (size before relaxing)
- .debug_str     0x000000000001ba4e      0x108 release/obj/hldll/h_ai.o
+ .debug_str     0x000000000001ba47      0x108 release/obj/hldll/h_ai.o
                                        0x1f63 (size before relaxing)
- .debug_str     0x000000000001bb56      0x214 release/obj/hldll/h_battery.o
+ .debug_str     0x000000000001bb4f      0x214 release/obj/hldll/h_battery.o
                                        0x3d1c (size before relaxing)
- .debug_str     0x000000000001bd6a      0x9f6 release/obj/hldll/h_cine.o
+ .debug_str     0x000000000001bd63      0x9f6 release/obj/hldll/h_cine.o
                                        0x3ce2 (size before relaxing)
- .debug_str     0x000000000001c760      0x8a4 release/obj/hldll/h_cycler.o
+ .debug_str     0x000000000001c759      0x8a4 release/obj/hldll/h_cycler.o
                                        0x4cfb (size before relaxing)
- .debug_str     0x000000000001d004       0x39 release/obj/hldll/h_export.o
+ .debug_str     0x000000000001cffd       0x39 release/obj/hldll/h_export.o
                                        0x1bf5 (size before relaxing)
- .debug_str     0x000000000001d03d      0x29d release/obj/hldll/handgrenade.o
+ .debug_str     0x000000000001d036      0x29d release/obj/hldll/handgrenade.o
                                        0x366c (size before relaxing)
- .debug_str     0x000000000001d2da      0x693 release/obj/hldll/hassassin.o
+ .debug_str     0x000000000001d2d3      0x693 release/obj/hldll/hassassin.o
                                        0x5d14 (size before relaxing)
- .debug_str     0x000000000001d96d      0x698 release/obj/hldll/headcrab.o
+ .debug_str     0x000000000001d966      0x698 release/obj/hldll/headcrab.o
                                        0x4bcf (size before relaxing)
- .debug_str     0x000000000001e005      0x37b release/obj/hldll/healthkit.o
+ .debug_str     0x000000000001dffe      0x37b release/obj/hldll/healthkit.o
                                        0x3e43 (size before relaxing)
- .debug_str     0x000000000001e380      0xeb0 release/obj/hldll/hgrunt.o
+ .debug_str     0x000000000001e379      0xeb0 release/obj/hldll/hgrunt.o
                                        0x6c0c (size before relaxing)
- .debug_str     0x000000000001f230      0x2fb release/obj/hldll/hornet.o
+ .debug_str     0x000000000001f229      0x2fb release/obj/hldll/hornet.o
                                        0x481a (size before relaxing)
- .debug_str     0x000000000001f52b      0x27a release/obj/hldll/hornetgun.o
+ .debug_str     0x000000000001f524      0x27a release/obj/hldll/hornetgun.o
                                        0x322f (size before relaxing)
- .debug_str     0x000000000001f7a5      0x764 release/obj/hldll/houndeye.o
+ .debug_str     0x000000000001f79e      0x764 release/obj/hldll/houndeye.o
                                        0x5e78 (size before relaxing)
- .debug_str     0x000000000001ff09      0x963 release/obj/hldll/ichthyosaur.o
+ .debug_str     0x000000000001ff02      0x963 release/obj/hldll/ichthyosaur.o
                                        0x5f6f (size before relaxing)
- .debug_str     0x000000000002086c      0x60d release/obj/hldll/islave.o
+ .debug_str     0x0000000000020865      0x60d release/obj/hldll/islave.o
                                        0x5fdf (size before relaxing)
- .debug_str     0x0000000000020e79      0x841 release/obj/hldll/items.o
+ .debug_str     0x0000000000020e72      0x841 release/obj/hldll/items.o
                                        0x3616 (size before relaxing)
- .debug_str     0x00000000000216ba      0x4f5 release/obj/hldll/leech.o
+ .debug_str     0x00000000000216b3      0x4f5 release/obj/hldll/leech.o
                                        0x4d74 (size before relaxing)
- .debug_str     0x0000000000021baf      0x273 release/obj/hldll/lights.o
+ .debug_str     0x0000000000021ba8      0x273 release/obj/hldll/lights.o
                                        0x3580 (size before relaxing)
- .debug_str     0x0000000000021e22     0x17ca release/obj/hldll/maprules.o
+ .debug_str     0x0000000000021e1b     0x17ca release/obj/hldll/maprules.o
                                        0x4dee (size before relaxing)
- .debug_str     0x00000000000235ec      0x31d release/obj/hldll/monstermaker.o
+ .debug_str     0x00000000000235e5      0x31d release/obj/hldll/monstermaker.o
                                        0x41a9 (size before relaxing)
- .debug_str     0x0000000000023909     0x1e2c release/obj/hldll/monsters.o
+ .debug_str     0x0000000000023902     0x1e2c release/obj/hldll/monsters.o
                                        0x7832 (size before relaxing)
- .debug_str     0x0000000000025735       0x19 release/obj/hldll/monsterstate.o
+ .debug_str     0x000000000002572e       0x19 release/obj/hldll/monsterstate.o
                                        0x2007 (size before relaxing)
- .debug_str     0x000000000002574e      0x362 release/obj/hldll/mortar.o
+ .debug_str     0x0000000000025747      0x362 release/obj/hldll/mortar.o
                                        0x4264 (size before relaxing)
- .debug_str     0x0000000000025ab0      0x5a0 release/obj/hldll/mp5.o
+ .debug_str     0x0000000000025aa9      0x5a0 release/obj/hldll/mp5.o
                                        0x37a3 (size before relaxing)
- .debug_str     0x0000000000026050      0xccd release/obj/hldll/nihilanth.o
+ .debug_str     0x0000000000026049      0xccd release/obj/hldll/nihilanth.o
                                        0x6554 (size before relaxing)
- .debug_str     0x0000000000026d1d     0x1d48 release/obj/hldll/nodes.o
+ .debug_str     0x0000000000026d16     0x1d48 release/obj/hldll/nodes.o
                                        0x5d40 (size before relaxing)
- .debug_str     0x0000000000028a65      0x10e release/obj/hldll/observer.o
+ .debug_str     0x0000000000028a5e      0x10e release/obj/hldll/observer.o
                                        0x1fc1 (size before relaxing)
- .debug_str     0x0000000000028b73      0x499 release/obj/hldll/osprey.o
+ .debug_str     0x0000000000028b6c      0x499 release/obj/hldll/osprey.o
                                        0x4a17 (size before relaxing)
- .debug_str     0x000000000002900c      0x4f7 release/obj/hldll/pathcorner.o
+ .debug_str     0x0000000000029005      0x4f7 release/obj/hldll/pathcorner.o
                                        0x394d (size before relaxing)
- .debug_str     0x0000000000029503       0xcb release/obj/hldll/plane.o
+ .debug_str     0x00000000000294fc       0xcb release/obj/hldll/plane.o
                                         0xae9 (size before relaxing)
- .debug_str     0x00000000000295ce     0x1920 release/obj/hldll/plats.o
+ .debug_str     0x00000000000295c7     0x1920 release/obj/hldll/plats.o
                                        0x5e05 (size before relaxing)
- .debug_str     0x000000000002aeee     0x21bf release/obj/hldll/player.o
+ .debug_str     0x000000000002aee7     0x21bf release/obj/hldll/player.o
                                        0x92f9 (size before relaxing)
- .debug_str     0x000000000002d0ad      0x340 release/obj/hldll/python.o
+ .debug_str     0x000000000002d0a6      0x340 release/obj/hldll/python.o
                                        0x3533 (size before relaxing)
- .debug_str     0x000000000002d3ed       0xda release/obj/hldll/rat.o
+ .debug_str     0x000000000002d3e6       0xda release/obj/hldll/rat.o
                                        0x316e (size before relaxing)
- .debug_str     0x000000000002d4c7      0x213 release/obj/hldll/roach.o
+ .debug_str     0x000000000002d4c0      0x213 release/obj/hldll/roach.o
                                        0x3ad5 (size before relaxing)
- .debug_str     0x000000000002d6da      0x5dc release/obj/hldll/rpg.o
+ .debug_str     0x000000000002d6d3      0x5dc release/obj/hldll/rpg.o
                                        0x4ab6 (size before relaxing)
- .debug_str     0x000000000002dcb6      0x51b release/obj/hldll/satchel.o
+ .debug_str     0x000000000002dcaf      0x51b release/obj/hldll/satchel.o
                                        0x4608 (size before relaxing)
- .debug_str     0x000000000002e1d1       0x5e release/obj/hldll/schedule.o
+ .debug_str     0x000000000002e1ca       0x5e release/obj/hldll/schedule.o
                                        0x438e (size before relaxing)
- .debug_str     0x000000000002e22f      0xdb1 release/obj/hldll/scientist.o
+ .debug_str     0x000000000002e228      0xdb1 release/obj/hldll/scientist.o
                                        0x672f (size before relaxing)
- .debug_str     0x000000000002efe0      0xbe3 release/obj/hldll/scripted.o
+ .debug_str     0x000000000002efd9      0xbe3 release/obj/hldll/scripted.o
                                        0x5524 (size before relaxing)
- .debug_str     0x000000000002fbc3      0x326 release/obj/hldll/shotgun.o
+ .debug_str     0x000000000002fbbc      0x326 release/obj/hldll/shotgun.o
                                        0x34dd (size before relaxing)
- .debug_str     0x000000000002fee9       0x1b release/obj/hldll/skill.o
+ .debug_str     0x000000000002fee2       0x1b release/obj/hldll/skill.o
                                        0x1fbe (size before relaxing)
- .debug_str     0x000000000002ff04      0xa0d release/obj/hldll/sound.o
+ .debug_str     0x000000000002fefd      0xa0d release/obj/hldll/sound.o
                                        0x4f91 (size before relaxing)
- .debug_str     0x0000000000030911      0x286 release/obj/hldll/soundent.o
+ .debug_str     0x000000000003090a      0x286 release/obj/hldll/soundent.o
                                        0x2a66 (size before relaxing)
- .debug_str     0x0000000000030b97       0x9a release/obj/hldll/spectator.o
+ .debug_str     0x0000000000030b90       0x9a release/obj/hldll/spectator.o
                                        0x2744 (size before relaxing)
- .debug_str     0x0000000000030c31      0x3f7 release/obj/hldll/squadmonster.o
+ .debug_str     0x0000000000030c2a      0x3f7 release/obj/hldll/squadmonster.o
                                        0x4890 (size before relaxing)
- .debug_str     0x0000000000031028      0x507 release/obj/hldll/squeakgrenade.o
+ .debug_str     0x0000000000031021      0x507 release/obj/hldll/squeakgrenade.o
                                        0x53d5 (size before relaxing)
- .debug_str     0x000000000003152f      0x582 release/obj/hldll/subs.o
+ .debug_str     0x0000000000031528      0x582 release/obj/hldll/subs.o
                                        0x4c81 (size before relaxing)
- .debug_str     0x0000000000031ab1      0x6b9 release/obj/hldll/talkmonster.o
+ .debug_str     0x0000000000031aaa      0x6b9 release/obj/hldll/talkmonster.o
                                        0x5bfa (size before relaxing)
- .debug_str     0x000000000003216a      0x812 release/obj/hldll/teamplay_gamerules.o
+ .debug_str     0x0000000000032163      0x812 release/obj/hldll/teamplay_gamerules.o
                                        0x2a44 (size before relaxing)
- .debug_str     0x000000000003297c     0x1119 release/obj/hldll/multiplay_gamerules.o
+ .debug_str     0x0000000000032975     0x1119 release/obj/hldll/multiplay_gamerules.o
                                        0x45ce (size before relaxing)
- .debug_str     0x0000000000033a95      0x88a release/obj/hldll/singleplay_gamerules.o
+ .debug_str     0x0000000000033a8e      0x88a release/obj/hldll/singleplay_gamerules.o
                                        0x22b1 (size before relaxing)
- .debug_str     0x000000000003431f       0x18 release/obj/hldll/tempmonster.o
+ .debug_str     0x0000000000034318       0x18 release/obj/hldll/tempmonster.o
                                          0xd2 (size before relaxing)
- .debug_str     0x0000000000034337      0xbcb release/obj/hldll/tentacle.o
+ .debug_str     0x0000000000034330      0xbcb release/obj/hldll/tentacle.o
                                        0x4fa9 (size before relaxing)
- .debug_str     0x0000000000034f02     0x27fa release/obj/hldll/triggers.o
+ .debug_str     0x0000000000034efb     0x27fa release/obj/hldll/triggers.o
                                        0x73c2 (size before relaxing)
- .debug_str     0x00000000000376fc      0x5c2 release/obj/hldll/tripmine.o
+ .debug_str     0x00000000000376f5      0x5c2 release/obj/hldll/tripmine.o
                                        0x54e9 (size before relaxing)
- .debug_str     0x0000000000037cbe      0xa00 release/obj/hldll/turret.o
+ .debug_str     0x0000000000037cb7      0xa00 release/obj/hldll/turret.o
                                        0x555c (size before relaxing)
- .debug_str     0x00000000000386be      0x862 release/obj/hldll/util.o
+ .debug_str     0x00000000000386b7      0x862 release/obj/hldll/util.o
                                        0x4bcc (size before relaxing)
- .debug_str     0x0000000000038f20      0xf0c release/obj/hldll/weapons.o
+ .debug_str     0x0000000000038f19      0xf0c release/obj/hldll/weapons.o
                                        0x6c73 (size before relaxing)
- .debug_str     0x0000000000039e2c      0x3c2 release/obj/hldll/world.o
+ .debug_str     0x0000000000039e25      0x3c2 release/obj/hldll/world.o
                                        0x4a28 (size before relaxing)
- .debug_str     0x000000000003a1ee      0xc7b release/obj/hldll/xen.o
+ .debug_str     0x000000000003a1e7      0xc7b release/obj/hldll/xen.o
                                        0x49f8 (size before relaxing)
- .debug_str     0x000000000003ae69      0x2cc release/obj/hldll/zombie.o
+ .debug_str     0x000000000003ae62      0x2cc release/obj/hldll/zombie.o
                                        0x3aa7 (size before relaxing)
- .debug_str     0x000000000003b135      0x383 release/obj/hldll/wpn_shared/hl_wpn_glock.o
+ .debug_str     0x000000000003b12e      0x383 release/obj/hldll/wpn_shared/hl_wpn_glock.o
                                        0x34c9 (size before relaxing)
- .debug_str     0x000000000003b4b8     0x108e release/obj/hldll/pm_shared/pm_shared.o
+ .debug_str     0x000000000003b4b1     0x108e release/obj/hldll/pm_shared/pm_shared.o
                                        0x2796 (size before relaxing)
- .debug_str     0x000000000003c546      0x2d6 release/obj/hldll/pm_shared/pm_math.o
+ .debug_str     0x000000000003c53f      0x2d6 release/obj/hldll/pm_shared/pm_math.o
                                         0x688 (size before relaxing)
- .debug_str     0x000000000003c81c      0x140 release/obj/hldll/pm_shared/pm_debug.o
+ .debug_str     0x000000000003c815      0x140 release/obj/hldll/pm_shared/pm_debug.o
                                         0xc4b (size before relaxing)
- .debug_str     0x000000000003c95c      0x4ef release/obj/hldll/game_shared/voice_gamemgr.o
-                                       0x2398 (size before relaxing)
+ .debug_str     0x000000000003c955      0x7d2 release/obj/hldll/game_shared/voice_gamemgr.o
+                                       0x26b1 (size before relaxing)
 
 .debug_loc      0x0000000000000000   0x1661b7
  *(.debug_loc)

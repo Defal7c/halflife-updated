@@ -1313,7 +1313,7 @@ void SENTENCEG_Init()
 		if (!buffer[i])
 			continue;
 
-		if (buffer[i] == '/')
+		if (buffer[i] == '/' || !isalpha(buffer[i]))
 			continue;
 
 		// get sentence name
@@ -1342,11 +1342,11 @@ void SENTENCEG_Init()
 		j--;
 		if (j <= i)
 			continue;
-		//if (!isdigit(buffer[j]))
-			//continue;
+		if (!isdigit(buffer[j]))
+			continue;
 
 		// cut out suffix numbers
-		while (j > i)
+		while (j > i && isdigit(buffer[j]))
 			j--;
 
 		if (j <= i)
@@ -1528,6 +1528,14 @@ static char *memfgets( byte *pMemFile, int fileSize, int &filePos, char *pBuffer
 
 	int stop = 0;
 
+	// Stop at the next newline (inclusive) or end of buffer
+	while ( i < last && !stop )
+	{
+		if ( pMemFile[i] == '\n' )
+			stop = 1;
+		i++;
+	}
+
 
 	// If we actually advanced the pointer, copy it over
 	if ( i != filePos )
@@ -1576,21 +1584,21 @@ void TEXTURETYPE_Init()
 	{
 		// skip whitespace
 		i = 0;
-		while(buffer[i])
+		while(buffer[i] && isspace(buffer[i]))
 			i++;
 		
 		if (!buffer[i])
 			continue;
 
 		// skip comment lines
-		if (buffer[i] == '/')
+		if (buffer[i] == '/' || !isalpha(buffer[i]))
 			continue;
 
 		// get texture type
-		//grgchTextureType[gcTextures] = toupper(buffer[i++]);
+		grgchTextureType[gcTextures] = toupper(buffer[i++]);
 
 		// skip whitespace
-		while(buffer[i])
+		while(buffer[i] && isspace(buffer[i]))
 			i++;
 		
 		if (!buffer[i])
@@ -1598,7 +1606,7 @@ void TEXTURETYPE_Init()
 
 		// get sentence name
 		j = i;
-		while (buffer[j])
+		while (buffer[j] && !isspace(buffer[j]))
 			j++;
 
 		if (!buffer[j])

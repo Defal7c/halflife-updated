@@ -1992,7 +1992,7 @@ void CSave :: WriteFunction( const char *pname, void **data, int count )
 {
 	const char *functionName;
 
-	functionName = NAME_FOR_FUNCTION( (int)*data );
+	functionName = NAME_FOR_FUNCTION( (uint32)*data );
 	if ( functionName )
 		BufferField( pname, strlen(functionName) + 1, functionName );
 	else

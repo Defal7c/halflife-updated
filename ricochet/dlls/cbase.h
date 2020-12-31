@@ -42,6 +42,7 @@ CBaseEntity
 // UNDONE: This will ignore transition volumes (trigger_transition), but not the PVS!!!
 #define		FCAP_FORCE_TRANSITION		0x00000080		// ALWAYS goes across transitions
 
+#include "archtypes.h"     // DAL
 #include "saverestore.h"
 #include "schedule.h"
 
@@ -49,17 +50,15 @@ CBaseEntity
 #include "monsterevent.h"
 #endif
 
+#include "Platform.h"
+
 // C functions for external declarations that call the appropriate C++ methods
 
-#ifdef _WIN32
-#define EXPORT	_declspec( dllexport )
-#else
-#define EXPORT  /* */
-#endif
+#define EXPORT DLLEXPORT
 
-extern "C" int EXPORT GetEntityAPI( DLL_FUNCTIONS *pFunctionTable, int interfaceVersion );
-extern "C" int EXPORT GetEntityAPI2( DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion );
-extern "C" EXPORT int GetNewDLLFunctions( NEW_DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion );
+extern "C" DLLEXPORT int GetEntityAPI( DLL_FUNCTIONS *pFunctionTable, int interfaceVersion );
+extern "C" DLLEXPORT int GetEntityAPI2( DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion );
+extern "C" DLLEXPORT int GetNewDLLFunctions( NEW_DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion );
 
 extern int DispatchSpawn( edict_t *pent );
 extern void DispatchKeyValue( edict_t *pentKeyvalue, KeyValueData *pkvd );
@@ -199,7 +198,6 @@ public:
 	virtual const char *TeamID( void ) { return ""; }
 
 	virtual BOOL	IsDisc( void ) { return FALSE; };
-	
 
 //	virtual void	SetActivator( CBaseEntity *pActivator ) {}
 	virtual CBaseEntity *GetNextTarget( void );
@@ -240,7 +238,7 @@ public:
 	void EXPORT SUB_DoNothing( void );
 	void EXPORT SUB_StartFadeOut ( void );
 	void EXPORT SUB_FadeOut ( void );
-	void EXPORT SUB_CallUseToggle( void );
+	void EXPORT SUB_CallUseToggle( void ) { this->Use( this, this, USE_TOGGLE, 0 ); }
 	int			ShouldToggle( USE_TYPE useType, BOOL currentState );
 	void		FireBullets( ULONG	cShots, Vector  vecSrc, Vector	vecDirShooting,	Vector	vecSpread, float flDistance, int iBulletType, int iTracerFreq = 4, int iDamage = 0, entvars_t *pevAttacker = NULL  );
 
@@ -296,8 +294,8 @@ public:
 	void FunctionCheck( void *pFunction, char *name ) 
 	{ 
 #ifdef _WIN32
-		if (pFunction && !NAME_FOR_FUNCTION((unsigned long)(pFunction)) )
-			ALERT( at_error, "No EXPORT: %s:%s (%08lx)\n", STRING(pev->classname), name, (unsigned long)pFunction );
+		if (pFunction && !NAME_FOR_FUNCTION((uint32)pFunction) )
+			ALERT( at_error, "No EXPORT: %s:%s (%08lx)\n", STRING(pev->classname), name, pFunction );
 #endif // _WIN32
 	}
 

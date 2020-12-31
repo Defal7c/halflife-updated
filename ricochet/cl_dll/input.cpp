@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1999, 2000 Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -35,10 +35,10 @@ extern "C"
 // Observer Movement modes (stored in pev->iuser1, so the physics code can get at them)
 #define OBS_CHASE_LOCKED		1
 #define OBS_CHASE_FREE			2
-#define OBS_ROAMING				3
+#define OBS_ROAMING				3	
 #define OBS_LOCKEDVIEW			4
 
-extern "C"
+extern "C" 
 {
 	struct kbutton_s DLLEXPORT *KB_Find( const char *name );
 	void DLLEXPORT CL_CreateMove ( float frametime, struct usercmd_s *cmd, int active );
@@ -247,11 +247,11 @@ Add a kbutton_t * to the list of pointers the engine can retrieve via KB_Find
 */
 void KB_Add( const char *name, kbutton_t *pkb )
 {
-	kblist_t *p;
+	kblist_t *p;	
 	kbutton_t *kb;
 
 	kb = KB_Find( name );
-
+	
 	if ( kb )
 		return;
 
@@ -319,7 +319,7 @@ void KeyDown (kbutton_t *b)
 
 	if (k == b->down[0] || k == b->down[1])
 		return;		// repeating key
-
+	
 	if (!b->down[0])
 		b->down[0] = k;
 	else if (!b->down[1])
@@ -329,7 +329,7 @@ void KeyDown (kbutton_t *b)
 		gEngfuncs.Con_DPrintf ("Three keys down for a button '%c' '%c' '%c'!\n", b->down[0], b->down[1], c);
 		return;
 	}
-
+	
 	if (b->state & 1)
 		return;		// still down
 	b->state |= 1 + 2;	// down + impulse down
@@ -344,7 +344,7 @@ void KeyUp (kbutton_t *b)
 {
 	int		k;
 	char	*c;
-
+	
 	c = gEngfuncs.Cmd_Argv(1);
 	if (c[0])
 		k = atoi(c);
@@ -496,11 +496,11 @@ float CL_KeyState (kbutton_t *key)
 {
 	float		val = 0.0;
 	int			impulsedown, impulseup, down;
-
+	
 	impulsedown = key->state & 2;
 	impulseup	= key->state & 4;
 	down		= key->state & 1;
-
+	
 	if ( impulsedown && !impulseup )
 	{
 		// pressed and held this frame?
@@ -524,17 +524,17 @@ float CL_KeyState (kbutton_t *key)
 		if ( down )
 		{
 			// released and re-pressed this frame
-			val = 0.75;
+			val = 0.75;	
 		}
 		else
 		{
 			// pressed and released this frame
-			val = 0.25;
+			val = 0.25;	
 		}
 	}
 
 	// clear impulses
-	key->state &= 1;
+	key->state &= 1;		
 	return val;
 }
 
@@ -559,7 +559,7 @@ void CL_AdjustAngles ( float frametime, float *viewangles )
 {
 	float	speed;
 	float	up, down;
-
+	
 	if (in_speed.state & 1)
 	{
 		speed = frametime * cl_anglespeedkey->value;
@@ -570,7 +570,7 @@ void CL_AdjustAngles ( float frametime, float *viewangles )
 	}
 
 	// Ricochet: Don't let them move the mouse when they're in spectator mode
-	if ( bCanMoveMouse() == FALSE )
+	if ( bCanMoveMouse() == FALSE ) 
 		 return;
 
 	if (!(in_strafe.state & 1))
@@ -585,16 +585,16 @@ void CL_AdjustAngles ( float frametime, float *viewangles )
 		viewangles[PITCH] -= speed*cl_pitchspeed->value * CL_KeyState (&in_forward);
 		viewangles[PITCH] += speed*cl_pitchspeed->value * CL_KeyState (&in_back);
 	}
-
+	
 	up = CL_KeyState (&in_lookup);
 	down = CL_KeyState(&in_lookdown);
-
+	
 	viewangles[PITCH] -= speed*cl_pitchspeed->value * up;
 	viewangles[PITCH] += speed*cl_pitchspeed->value * down;
 
 	if (up || down)
 		V_StopPitchDrift ();
-
+		
 	if (viewangles[PITCH] > cl_pitchdown->value)
 		viewangles[PITCH] = cl_pitchdown->value;
 	if (viewangles[PITCH] < -cl_pitchup->value)
@@ -616,7 +616,7 @@ if active == 1 then we are 1) not playing back demos ( where our commands are ig
 ================
 */
 void DLLEXPORT CL_CreateMove ( float frametime, struct usercmd_s *cmd, int active )
-{
+{	
 	float spd;
 	vec3_t viewangles;
 	static vec3_t oldangles;
@@ -630,7 +630,7 @@ void DLLEXPORT CL_CreateMove ( float frametime, struct usercmd_s *cmd, int activ
 		CL_AdjustAngles ( frametime, viewangles );
 
 		memset (cmd, 0, sizeof(*cmd));
-
+		
 		gEngfuncs.SetViewAngles( (float *)viewangles );
 
 		if ( in_strafe.state & 1 )
@@ -646,10 +646,10 @@ void DLLEXPORT CL_CreateMove ( float frametime, struct usercmd_s *cmd, int activ
 		cmd->upmove -= cl_upspeed->value * CL_KeyState (&in_down);
 
 		if ( !(in_klook.state & 1 ) )
-		{
+		{	
 			cmd->forwardmove += cl_forwardspeed->value * CL_KeyState (&in_forward);
 			cmd->forwardmove -= cl_backspeed->value * CL_KeyState (&in_back);
-		}
+		}	
 
 		// adjust for speed key
 		if ( in_speed.state & 1 )
@@ -692,7 +692,7 @@ void DLLEXPORT CL_CreateMove ( float frametime, struct usercmd_s *cmd, int activ
 	// If they're in a modal dialog, ignore the attack button.
 	if( GetClientVoiceMgr()->IsInSquelchMode() )
 		cmd->buttons &= ~IN_ATTACK;
-
+	
 	// Using joystick?
 	if ( in_joystick->value )
 	{
@@ -748,12 +748,12 @@ int CL_ButtonBits( int bResetState )
 	{
 		bits |= IN_ATTACK;
 	}
-
+	
 	if (in_duck.state & 3)
 	{
 		bits |= IN_DUCK;
 	}
-
+ 
 	if (in_jump.state & 3)
 	{
 		bits |= IN_JUMP;
@@ -763,7 +763,7 @@ int CL_ButtonBits( int bResetState )
 	{
 		bits |= IN_FORWARD;
 	}
-
+	
 	if (in_back.state & 3)
 	{
 		bits |= IN_BACK;
@@ -783,17 +783,17 @@ int CL_ButtonBits( int bResetState )
 	{
 		bits |= IN_LEFT;
 	}
-
+	
 	if (in_right.state & 3)
 	{
 		bits |= IN_RIGHT;
 	}
-
+	
 	if ( in_moveleft.state & 3 )
 	{
 		bits |= IN_MOVELEFT;
 	}
-
+	
 	if (in_moveright.state & 3)
 	{
 		bits |= IN_MOVERIGHT;

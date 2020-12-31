@@ -41,7 +41,6 @@ void VectorAngles( const float *forward, float *angles );
 int CL_ButtonBits( int );
 
 // xxx need client dll function to get and clear impuse
-
 extern cvar_t *in_joystick;
 
 int	in_impulse	= 0;
@@ -232,11 +231,11 @@ Add a kbutton_t * to the list of pointers the engine can retrieve via KB_Find
 */
 void KB_Add( const char *name, kbutton_t *pkb )
 {
-	kblist_t *p;
+	kblist_t *p;	
 	kbutton_t *kb;
 
 	kb = KB_Find( name );
-
+	
 	if ( kb )
 		return;
 
@@ -304,7 +303,7 @@ void KeyDown (kbutton_t *b)
 
 	if (k == b->down[0] || k == b->down[1])
 		return;		// repeating key
-
+	
 	if (!b->down[0])
 		b->down[0] = k;
 	else if (!b->down[1])
@@ -314,7 +313,7 @@ void KeyDown (kbutton_t *b)
 		gEngfuncs.Con_DPrintf ("Three keys down for a button '%c' '%c' '%c'!\n", b->down[0], b->down[1], c);
 		return;
 	}
-
+	
 	if (b->state & 1)
 		return;		// still down
 	b->state |= 1 + 2;	// down + impulse down
@@ -329,7 +328,7 @@ void KeyUp (kbutton_t *b)
 {
 	int		k;
 	char	*c;
-
+	
 	c = gEngfuncs.Cmd_Argv(1);
 	if (c[0])
 		k = atoi(c);
@@ -372,7 +371,7 @@ int DLLEXPORT HUD_Key_Event( int down, int keynum, const char *pszCurrentBinding
 
 	if (gViewPort)
 		return gViewPort->KeyInput(down, keynum, pszCurrentBinding);
-
+	
 	return 1;
 }
 
@@ -450,7 +449,7 @@ void IN_StrafeUp(void) {KeyUp(&in_strafe);}
 // needs capture by hud/vgui also
 extern void __CmdFunc_InputPlayerSpecial(void);
 
-void IN_Attack2Down(void)
+void IN_Attack2Down(void) 
 {
 	KeyDown(&in_attack2);
 
@@ -553,11 +552,11 @@ float CL_KeyState (kbutton_t *key)
 {
 	float		val = 0.0;
 	int			impulsedown, impulseup, down;
-
+	
 	impulsedown = key->state & 2;
 	impulseup	= key->state & 4;
 	down		= key->state & 1;
-
+	
 	if ( impulsedown && !impulseup )
 	{
 		// pressed and held this frame?
@@ -581,17 +580,17 @@ float CL_KeyState (kbutton_t *key)
 		if ( down )
 		{
 			// released and re-pressed this frame
-			val = 0.75;
+			val = 0.75;	
 		}
 		else
 		{
 			// pressed and released this frame
-			val = 0.25;
+			val = 0.25;	
 		}
 	}
 
 	// clear impulses
-	key->state &= 1;
+	key->state &= 1;		
 	return val;
 }
 
@@ -606,7 +605,7 @@ void CL_AdjustAngles ( float frametime, float *viewangles )
 {
 	float	speed;
 	float	up, down;
-
+	
 	if (in_speed.state & 1)
 	{
 		speed = frametime * cl_anglespeedkey->value;
@@ -628,16 +627,16 @@ void CL_AdjustAngles ( float frametime, float *viewangles )
 		viewangles[PITCH] -= speed*cl_pitchspeed->value * CL_KeyState (&in_forward);
 		viewangles[PITCH] += speed*cl_pitchspeed->value * CL_KeyState (&in_back);
 	}
-
+	
 	up = CL_KeyState (&in_lookup);
 	down = CL_KeyState(&in_lookdown);
-
+	
 	viewangles[PITCH] -= speed*cl_pitchspeed->value * up;
 	viewangles[PITCH] += speed*cl_pitchspeed->value * down;
 
 	if (up || down)
 		V_StopPitchDrift ();
-
+		
 	if (viewangles[PITCH] > cl_pitchdown->value)
 		viewangles[PITCH] = cl_pitchdown->value;
 	if (viewangles[PITCH] < -cl_pitchup->value)
@@ -659,7 +658,7 @@ if active == 1 then we are 1) not playing back demos ( where our commands are ig
 ================
 */
 void DLLEXPORT CL_CreateMove ( float frametime, struct usercmd_s *cmd, int active )
-{
+{	
 //	RecClCL_CreateMove(frametime, cmd, active);
 
 	float spd;
@@ -675,7 +674,7 @@ void DLLEXPORT CL_CreateMove ( float frametime, struct usercmd_s *cmd, int activ
 		CL_AdjustAngles ( frametime, viewangles );
 
 		memset (cmd, 0, sizeof(*cmd));
-
+		
 		gEngfuncs.SetViewAngles( (float *)viewangles );
 
 		if ( in_strafe.state & 1 )
@@ -691,10 +690,10 @@ void DLLEXPORT CL_CreateMove ( float frametime, struct usercmd_s *cmd, int activ
 		cmd->upmove -= cl_upspeed->value * CL_KeyState (&in_down);
 
 		if ( !(in_klook.state & 1 ) )
-		{
+		{	
 			cmd->forwardmove += cl_forwardspeed->value * CL_KeyState (&in_forward);
 			cmd->forwardmove -= cl_backspeed->value * CL_KeyState (&in_back);
-		}
+		}	
 
 		// adjust for speed key
 		if ( in_speed.state & 1 )
@@ -795,12 +794,12 @@ int CL_ButtonBits( int bResetState )
 	{
 		bits |= IN_ATTACK;
 	}
-
+	
 	if (in_duck.state & 3)
 	{
 		bits |= IN_DUCK;
 	}
-
+ 
 	if (in_jump.state & 3)
 	{
 		bits |= IN_JUMP;
@@ -810,7 +809,7 @@ int CL_ButtonBits( int bResetState )
 	{
 		bits |= IN_FORWARD;
 	}
-
+	
 	if (in_back.state & 3)
 	{
 		bits |= IN_BACK;
@@ -830,17 +829,17 @@ int CL_ButtonBits( int bResetState )
 	{
 		bits |= IN_LEFT;
 	}
-
+	
 	if (in_right.state & 3)
 	{
 		bits |= IN_RIGHT;
 	}
-
+	
 	if ( in_moveleft.state & 3 )
 	{
 		bits |= IN_MOVELEFT;
 	}
-
+	
 	if (in_moveright.state & 3)
 	{
 		bits |= IN_MOVERIGHT;
@@ -1037,6 +1036,6 @@ void DLLEXPORT HUD_Shutdown( void )
 #if defined( _TFC )
 	ClearEventList();
 #endif
-
+	
 	CL_UnloadParticleMan();
 }

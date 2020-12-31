@@ -5,7 +5,7 @@
 // $NoKeywords: $
 //=============================================================================
 
-//#include "archtypes.h"     // DAL
+#include "archtypes.h"     // DAL
 #include "voice_gamemgr.h"
 #include <string.h>
 #include <assert.h>
@@ -179,7 +179,7 @@ bool CVoiceGameMgr::ClientCommand(CBasePlayer *pPlayer, const char *cmd)
 	{
 		for(int i=1; i < CMD_ARGC(); i++)
 		{
-			int mask = 0;
+			uint32 mask = 0;
 			sscanf(CMD_ARGV(i), "%x", &mask);
 
 			if(i <= VOICE_MAX_PLAYERS_DW)

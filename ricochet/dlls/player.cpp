@@ -130,7 +130,7 @@ TYPEDESCRIPTION	CBasePlayer::m_playerSaveData[] =
 	DEFINE_FIELD( CBasePlayer, m_iHideHUD, FIELD_INTEGER ),
 	DEFINE_FIELD( CBasePlayer, m_iFOV, FIELD_INTEGER ),
 
-	DEFINE_FIELD( CBasePlayer, m_fDeadTime, FIELD_FLOAT ), // only used in multiplayer games
+	//DEFINE_FIELD( CBasePlayer, m_fDeadTime, FIELD_FLOAT ), // only used in multiplayer games
 	//DEFINE_FIELD( CBasePlayer, m_fGameHUDInitialized, FIELD_INTEGER ), // only used in multiplayer games
 	//DEFINE_FIELD( CBasePlayer, m_flStopExtraSoundTime, FIELD_TIME ),
 	//DEFINE_FIELD( CBasePlayer, m_fKnownItem, FIELD_INTEGER ), // reset to zero on load
@@ -145,17 +145,17 @@ TYPEDESCRIPTION	CBasePlayer::m_playerSaveData[] =
 	//DEFINE_FIELD( CBasePlayer, m_iStepLeft, FIELD_INTEGER ), // Don't need to restore
 	//DEFINE_ARRAY( CBasePlayer, m_szTextureName, FIELD_CHARACTER, CBTEXTURENAMEMAX ), // Don't need to restore
 	//DEFINE_FIELD( CBasePlayer, m_chTextureType, FIELD_CHARACTER ), // Don't need to restore
-	DEFINE_FIELD( CBasePlayer, m_fNoPlayerSound, FIELD_BOOLEAN ), // Don't need to restore, debug
+	//DEFINE_FIELD( CBasePlayer, m_fNoPlayerSound, FIELD_BOOLEAN ), // Don't need to restore, debug
 	//DEFINE_FIELD( CBasePlayer, m_iUpdateTime, FIELD_INTEGER ), // Don't need to restore
 	//DEFINE_FIELD( CBasePlayer, m_iClientHealth, FIELD_INTEGER ), // Don't restore, client needs reset
 	//DEFINE_FIELD( CBasePlayer, m_iClientBattery, FIELD_INTEGER ), // Don't restore, client needs reset
-	DEFINE_FIELD( CBasePlayer, m_iClientHideHUD, FIELD_INTEGER ), // Don't restore, client needs reset
+	//DEFINE_FIELD( CBasePlayer, m_iClientHideHUD, FIELD_INTEGER ), // Don't restore, client needs reset
 	//DEFINE_FIELD( CBasePlayer, m_fWeapon, FIELD_BOOLEAN ),  // Don't restore, client needs reset
-	DEFINE_FIELD( CBasePlayer, m_nCustomSprayFrames, FIELD_INTEGER ), // Don't restore, depends on server message after spawning and only matters in multiplayer
+	//DEFINE_FIELD( CBasePlayer, m_nCustomSprayFrames, FIELD_INTEGER ), // Don't restore, depends on server message after spawning and only matters in multiplayer
 	//DEFINE_FIELD( CBasePlayer, m_vecAutoAim, FIELD_VECTOR ), // Don't save/restore - this is recomputed
 	//DEFINE_ARRAY( CBasePlayer, m_rgAmmoLast, FIELD_INTEGER, MAX_AMMO_SLOTS ), // Don't need to restore
 	//DEFINE_FIELD( CBasePlayer, m_fOnTarget, FIELD_BOOLEAN ), // Don't need to restore
-	DEFINE_FIELD( CBasePlayer, m_nCustomSprayFrames, FIELD_INTEGER ), // Don't need to restore
+	//DEFINE_FIELD( CBasePlayer, m_nCustomSprayFrames, FIELD_INTEGER ), // Don't need to restore
 
 };
 
@@ -713,12 +713,6 @@ void CBasePlayer::SetAnimation( PLAYER_ANIM playerAnim )
 	case PLAYER_FALL:
 		m_IdealActivity = ACT_FALL;
 		break;
-
-	//Taunt shit babeeey
-	case PLAYER_TAUNT1:
-		m_IdealActivity = ACT_TAUNT1;
-		break;
-
 
 	case PLAYER_IDLE:
 	case PLAYER_WALK:
@@ -1422,14 +1416,6 @@ void CBasePlayer::Jump()
 
 	SetAnimation( PLAYER_JUMP );
 
-	if ( m_fLongJump &&
-		(pev->button & IN_DUCK) &&
-		( pev->flDuckTime > 0 ) &&
-		pev->velocity.Length() > 50 )
-	{
-		SetAnimation( PLAYER_SUPERJUMP );
-	}
-
 	// If you're standing on a conveyor, add it's velocity to yours (for momentum)
 	entvars_t *pevGround = VARS(pev->groundentity);
 	if ( pevGround && (pevGround->flags & FL_CONVEYOR) )
@@ -1894,7 +1880,7 @@ void CBasePlayer::PreThink(void)
 	// Needed for listen servers because they lose msgs while bringing up the svr.
 	if ( m_flKnownItemTime && m_flKnownItemTime < gpGlobals->time )
 	{
-		CLIENT_COMMAND( edict(), "r_drawviewmodel 1\n" );
+		CLIENT_COMMAND( edict(), "r_drawviewmodel 0\n" );
 		m_fKnownItem = FALSE;
 		m_flKnownItemTime = 0;
 	}
@@ -2004,7 +1990,7 @@ void CBasePlayer::PreThink(void)
 		m_iTrain = TRAIN_NEW; // turn off train
 
 	// DISCWAR: No Jumping or Ducking
-	//fuck you I wanna jump lol
+	// stfu I want jumping lol
 	if (pev->button & IN_JUMP)
 	{
 		// If on a ladder, jump off the ladder
@@ -4679,8 +4665,8 @@ LINK_ENTITY_TO_CLASS( monster_hevsuit_dead, CDeadHEV );
 //=========================================================
 void CDeadHEV :: Spawn( void )
 {
-	PRECACHE_MODEL("models/player/male/male.mdl");
-	SET_MODEL(ENT(pev), "models/player/male/male.mdl");
+	PRECACHE_MODEL("models/player.mdl");
+	SET_MODEL(ENT(pev), "models/player.mdl");
 
 	pev->effects		= 0;
 	pev->yaw_speed		= 8;
@@ -4898,9 +4884,8 @@ void CBasePlayer::ClearFreezeAndRender()
 // This should eventually be moved into the engine.
 void CBasePlayer::ClientHearVox( const char *pSentence )
 {
-	//MESSAGE_BEGIN( MSG_ONE, SVC_STUFFTEXT, NULL, pev );
-	MESSAGE_BEGIN( MSG_ONE, SVC_TEMPENTITY, NULL, pev );
-	
+	MESSAGE_BEGIN( MSG_ONE, SVC_STUFFTEXT, NULL, pev );
+
 	// If it's a sentence, don't put quotes around it
 	if (pSentence[0] == '#')
 	{

@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1999, 2000 Valve LLC. All rights reserved.
-*
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	
+*	This product contains software technology licensed from Id 
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
 *	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
@@ -58,8 +58,6 @@
 
 #define TEAM_NAME_LENGTH	16
 
-#include "../pm_shared/pm_materials.h"
-
 typedef enum
 {
 	PLAYER_IDLE,
@@ -69,7 +67,6 @@ typedef enum
 	PLAYER_DIE,
 	PLAYER_ATTACK1,
 	PLAYER_FALL,
-	PLAYER_TAUNT1,
 } PLAYER_ANIM;
 
 class CDiscArena;
@@ -80,25 +77,25 @@ public:
 	int					random_seed;    // See that is shared between client & server for shared weapons code
 
 	int					m_iPlayerSound;// the index of the sound list slot reserved for this player
-	int					m_iTargetVolume;// ideal sound volume.
+	int					m_iTargetVolume;// ideal sound volume. 
 	int					m_iWeaponVolume;// how loud the player's weapon is right now.
 	int					m_iExtraSoundTypes;// additional classification for this weapon's sound
 	int					m_iWeaponFlash;// brightness of the weapon flash
 	float				m_flStopExtraSoundTime;
-
+	
 	float				m_flFlashLightTime;	// Time until next battery draw/Recharge
 	int					m_iFlashBattery;		// Flashlight Battery Draw
 
 	int					m_afButtonLast;
 	int					m_afButtonPressed;
 	int					m_afButtonReleased;
-
+	
 	edict_t			   *m_pentSndLast;			// last sound entity to modify player room type
 	float				m_flSndRoomtype;		// last roomtype set by sound entity
 	float				m_flSndRange;			// dist from player to sound entity
 
 	float				m_flFallVelocity;
-
+	
 	int					m_rgItems[MAX_ITEMS];
 	int					m_fKnownItem;		// True when a new item needs to be added
 	int					m_fNewAmmo;			// True when a new item has been added
@@ -132,7 +129,7 @@ public:
 	int					m_idrowndmg;			// track drowning damage taken
 	int					m_idrownrestored;		// track drowning damage restored
 
-	int					m_bitsHUDDamage;		// Damage bits for the current fame. These get sent to
+	int					m_bitsHUDDamage;		// Damage bits for the current fame. These get sent to 
 												// the hude via the DAMAGE message
 	BOOL				m_fInitHUD;				// True when deferred HUD restart msg needs to be sent
 	BOOL				m_fGameHUDInitialized;
@@ -142,7 +139,7 @@ public:
 	EHANDLE				m_pTank;				// the tank which the player is currently controlling,  NULL if no tank
 	float				m_fDeadTime;			// the time at which the player died  (used in PlayerDeathThink())
 
-	BOOL			m_fNoPlayerSound;	// a debugging feature. Player makes no sound if this is true.
+	BOOL			m_fNoPlayerSound;	// a debugging feature. Player makes no sound if this is true. 
 	BOOL			m_fLongJump; // does this player have the longjump module?
 
 	float       m_tSneaking;
@@ -153,7 +150,7 @@ public:
 	int			m_iClientHideHUD;
 	int			m_iFOV;			// field of view
 	int			m_iClientFOV;	// client's known FOV
-	// usable player items
+	// usable player items 
 	CBasePlayerItem	*m_rgpPlayerItems[MAX_ITEM_TYPES];
 	CBasePlayerItem *m_pActiveItem;
 	CBasePlayerItem *m_pClientActiveItem;  // client version of the active item
@@ -177,7 +174,7 @@ public:
 	virtual void Spawn( void );
 	void Pain( void );
 
-    //virtual void Think( void );
+//	virtual void Think( void );
 	virtual void Jump( void );
 	virtual void Duck( void );
 	virtual void PreThink( void );
@@ -207,7 +204,7 @@ public:
 
 	// JOHN:  sends custom messages if player HUD data has changed  (eg health, ammo)
 	virtual void UpdateClientData( void );
-
+	
 	static	TYPEDESCRIPTION m_playerSaveData[];
 
 	// Player is moved across the transition by other means
@@ -217,7 +214,7 @@ public:
 	BOOL			FlashlightIsOn( void );
 	void			FlashlightTurnOn( void );
 	void			FlashlightTurnOff( void );
-
+	
 	void UpdatePlayerSound ( void );
 	void DeathSound ( void );
 
@@ -336,7 +333,7 @@ public:
 	void ObserverInput_NextPlayer();
 
 	void ClientHearVox( const char *pSentence );
-
+	
 	float m_flSendArenaStatus; //Sigh.
 	float m_flChangeAngles; //Double sigh.
 };
@@ -353,7 +350,7 @@ extern BOOL gInitHUD;
 // Observer Movement modes (stored in pev->iuser1, so the physics code can get at them)
 #define OBS_CHASE_LOCKED		1
 #define OBS_CHASE_FREE			2
-#define OBS_ROAMING				3
+#define OBS_ROAMING				3	
 #define OBS_LOCKEDVIEW			4
 
 #endif // PLAYER_H
